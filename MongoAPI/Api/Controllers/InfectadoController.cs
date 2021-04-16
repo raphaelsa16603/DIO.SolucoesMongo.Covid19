@@ -4,6 +4,7 @@ using Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace Api.Controllers
 {
@@ -96,10 +97,9 @@ namespace Api.Controllers
                 update = Builders<Infectado>.Update
                         .Set( s => s.Sexo, dto.Sexo);
                         
-            // update = Builders<Infectado>.Update
-            //             .Set( s => s.Localizacao.Longitude, dto.Longitude);
-            // update = Builders<Infectado>.Update            
-            //              .Set( s => s.Localizacao.Latitude, dto.Latitude);
+            update = Builders<Infectado>.Update
+                         .Set( s => s.Localizacao, 
+                         new GeoJson2DGeographicCoordinates(dto.Longitude, dto.Latitude));
             
             try
             {
@@ -108,7 +108,7 @@ namespace Api.Controllers
                     var result = await  _infectadosCollection.UpdateOneAsync(filter, update);
                 }
             }
-            catch (System.Exception ex) //(System.Exception ex)
+            catch (System.Exception) //(System.Exception ex)
             {
                 //$"Banco de Dados Falhou : {ex.Message}"
             }
