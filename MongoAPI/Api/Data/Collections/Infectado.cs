@@ -13,10 +13,10 @@ namespace Api.Data.Collections
             this.Sexo = sexo;
             this.Localizacao = new GeoJson2DGeographicCoordinates(longitude, latitude);
             this.DataObito = dataObito;
-            this.UId = GerarUId();
+            this.uId = GerarUId();
         }
         
-        public string UId { get; set; }
+        public string uId { get; set; }
         public DateTime DataNascimento { get; set; }
         public string Sexo { get; set; }
 
