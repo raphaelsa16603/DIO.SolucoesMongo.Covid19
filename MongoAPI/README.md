@@ -38,3 +38,8 @@ https://docs.mongodb.com/manual/
 https://docs.mongodb.com/ecosystem/drivers/csharp/
 
 https://docs.atlas.mongodb.com/
+
+---------------------------------------
+### Instalando pacote Swagger
+### Swashbuckle - https://docs.microsoft.com/pt-br/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-5.0&tabs=netcore-cli
+dotnet add Api.csproj package Swashbuckle.AspNetCore -v 5.6.3
