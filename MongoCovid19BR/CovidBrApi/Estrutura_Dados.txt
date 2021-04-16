@@ -1,0 +1,41 @@
+{
+    "_id": {
+        "$oid": "6079c72434f00dae09207dd7"
+    },
+    "city": "Rio Branco",
+    "city_ibge_code": "1200401",
+    "date": {
+        "$date": "2020-03-17T00:00:00.000Z"
+    },
+    "epidemiological_week": "202012",
+    "estimated_population": {
+        "$numberLong": "413418"
+    },
+    "estimated_population_2019": {
+        "$numberLong": "407319"
+    },
+    "is_last": "False",
+    "is_repeated": "False",
+    "last_available_confirmed": {
+        "$numberLong": "3"
+    },
+    "last_available_confirmed_per_100k_inhabitants": 0.72566,
+    "last_available_date": {
+        "$date": "2020-03-17T00:00:00.000Z"
+    },
+    "last_available_death_rate": 0,
+    "last_available_deaths": {
+        "$numberLong": "0"
+    },
+    "order_for_place": {
+        "$numberLong": "1"
+    },
+    "place_type": "city",
+    "state": "AC",
+    "new_confirmed": {
+        "$numberLong": "3"
+    },
+    "new_deaths": {
+        "$numberLong": "0"
+    }
+}
