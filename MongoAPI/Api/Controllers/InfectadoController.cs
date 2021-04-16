@@ -15,13 +15,16 @@ namespace Api.Controllers
         public InfectadoController(Data.MongoDB mongoDB)
         {
             _mongoDB = mongoDB;
-            _infectadosCollection = _mongoDB.DB.GetCollection<Infectado>(typeof(Infectado).Name.ToLower());
+            _infectadosCollection = _mongoDB.DB.GetCollection<Infectado>
+                                       (typeof(Infectado).Name.ToLower());
         }
 
         [HttpPost]
         public ActionResult SalvarInfectado([FromBody] InfectadoDto dto)
         {
-            var infectado = new Infectado(dto.DataNascimento, dto.Sexo, dto.Latitude, dto.Longitude);
+            var infectado = new Infectado(dto.DataNascimento, dto.Sexo, 
+            dto.Latitude, dto.Longitude, 
+            dto.DataObito);
 
             _infectadosCollection.InsertOne(infectado);
             
