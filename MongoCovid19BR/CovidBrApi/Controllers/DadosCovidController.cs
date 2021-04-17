@@ -78,5 +78,43 @@ namespace CovidBrApi.Controllers
                     $"Banco de Dados Falhou : {ex.Message}");
             }
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SalvarDados([FromBody] DadosCovidDto dto)
+        {
+            var dados = new DadosCovid(
+                dto.city,
+                dto.city_ibge_code, 
+                dto.city_ibglast_available_confirmede_code, 
+                dto.date, 
+                dto.epidemiological_week, 
+                dto.estimated_population, 
+                dto.estimated_population_2019, 
+                dto.is_last, 
+                dto.is_repeated, 
+                dto.last_available_confirmed_per_100k_inhabitants,
+                dto.last_available_date,
+                dto.last_available_death_rate,
+                dto.last_available_deaths,
+                dto.new_confirmed,
+                dto.new_deaths,
+                dto.order_for_place,
+                dto.place_type,
+                dto.state
+                );
+            try
+            {
+                await _dadosCovidCollection.InsertOneAsync(dados);
+                
+                return StatusCode(201, "Dados do Covid adicionado com sucesso");
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    $"Banco de Dados Falhou : {ex.Message}");
+            }
+        }
     }
 }
