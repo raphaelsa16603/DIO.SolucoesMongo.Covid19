@@ -1,8 +1,8 @@
 using System;
 
-namespace CovidBrApi.Data.Collections
+namespace CovidBrApi.Models
 {
-    public class CasosCovidBr
+    public class DadosCovidDto
     {
         public string city { get; set; }
         public string city_ibge_code { get; set; }
