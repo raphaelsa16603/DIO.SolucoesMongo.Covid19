@@ -1,0 +1,20 @@
+{
+  "city": "Minador do Negrão",
+  "city_ibge_code": "2705309",
+  "date": "2021-01-04T00:00:00.117Z",
+  "epidemiological_week": "202101",
+  "estimated_population": 5322,
+  "estimated_population_2019": 5329,
+  "is_last": "False",
+  "is_repeated": "False",
+  "city_ibglast_available_confirmede_code": 100,
+  "last_available_confirmed_per_100k_inhabitants": 1878.99286,
+  "last_available_date": "2021-01-04",
+  "last_available_death_rate": 0.03,
+  "last_available_deaths": 3,
+  "order_for_place": 228,
+  "place_type": "city",
+  "state": "AL",
+  "new_confirmed": 0,
+  "new_deaths": 0
+}
