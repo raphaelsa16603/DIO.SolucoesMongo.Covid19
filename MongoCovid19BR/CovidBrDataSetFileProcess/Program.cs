@@ -1,4 +1,6 @@
 ﻿using System;
+using CovidBrDataSetFileProcess.Lib.ProgressBar;
+using System.Threading;
 
 namespace CovidBrDataSetFileProcess
 {
@@ -9,6 +11,9 @@ namespace CovidBrDataSetFileProcess
             // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
             // e pegar a data do arquivo -- Classe Ler dados da página!
             
+            // TODO: -- Classe para fazer barra de progresso na tela do console
+            TesteDoProgressBar();
+
             // TODO: Baixar o arquivo .gzip -- Classe para baixar arquivo da web
 
             // TODO: Descompactar o arquivo, colocando em uma pasta temporária
@@ -30,5 +35,16 @@ namespace CovidBrDataSetFileProcess
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
         }
+
+        static void TesteDoProgressBar() {
+		Console.Write("Performing some task... ");
+		using (var progress = new ConsoleProgressBar()) {
+			for (int i = 0; i <= 100; i++) {
+				progress.Report((double) i / 100);
+				Thread.Sleep(20);
+			}
+		}
+		Console.WriteLine("Done.");
+	}
     }
 }
