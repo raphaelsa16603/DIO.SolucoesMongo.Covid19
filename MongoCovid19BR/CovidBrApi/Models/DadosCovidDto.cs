@@ -34,5 +34,7 @@ namespace CovidBrApi.Models
 
         public long new_confirmed { get; set; }
         public long new_deaths { get; set; }
+
+        public string uId {get; set;}
     }
 }

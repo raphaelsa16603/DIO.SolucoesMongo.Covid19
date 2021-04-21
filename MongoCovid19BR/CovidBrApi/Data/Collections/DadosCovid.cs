@@ -85,5 +85,50 @@ namespace CovidBrApi.Data.Collections
           this.uId = "";
 
         }
+
+        public DadosCovid(
+                string city,
+                string city_ibge_code, 
+                long city_ibglast_available_confirmede_code, 
+                DateTime date, 
+                string epidemiological_week, 
+                long estimated_population, 
+                long estimated_population_2019, 
+                string is_last, 
+                string is_repeated, 
+                double last_available_confirmed_per_100k_inhabitants,
+                DateTime last_available_date,
+                double last_available_death_rate,
+                long last_available_deaths,
+                long new_confirmed,
+                long new_deaths,
+                long order_for_place,
+                string place_type,
+                string state, 
+                string uId
+                )
+        { 
+
+          this.city = city;
+          this.city_ibge_code = city_ibge_code;
+          this.city_ibglast_available_confirmede_code = city_ibglast_available_confirmede_code;
+          this.date = date;
+          this.epidemiological_week = epidemiological_week;
+          this.estimated_population = estimated_population; 
+          this.estimated_population_2019 = estimated_population_2019;
+          this.is_last = is_last;
+          this.is_repeated = is_repeated;
+          this.last_available_confirmed_per_100k_inhabitants = last_available_confirmed_per_100k_inhabitants;
+          this.last_available_date = last_available_date;
+          this.last_available_death_rate = last_available_death_rate;
+          this.last_available_deaths = last_available_deaths;
+          this.new_confirmed = new_confirmed;
+          this.new_deaths = new_deaths;
+          this.order_for_place = order_for_place;
+          this.place_type = place_type;
+          this.state = state;
+          this.uId = uId;
+
+        }
     }
 }
