@@ -1,6 +1,7 @@
 ﻿using System;
 using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using System.Threading;
+using CovidBrDataSetFileProcess.Lib.DownLoadFile;
 
 namespace CovidBrDataSetFileProcess
 {
@@ -15,6 +16,10 @@ namespace CovidBrDataSetFileProcess
             TesteDoProgressBar();
 
             // TODO: Baixar o arquivo .gzip -- Classe para baixar arquivo da web
+            // Statico === 
+            // DownLoadFile.DownLoadFileInBackground4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
+            DownLoadFile DownPB = new DownLoadFile();
+            DownPB.DownLoadFileInBackgroundByProgBar4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
 
             // TODO: Descompactar o arquivo, colocando em uma pasta temporária
             // -- Classe para descompactar arquivo
