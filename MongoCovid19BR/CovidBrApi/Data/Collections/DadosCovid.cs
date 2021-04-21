@@ -1,9 +1,14 @@
 using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace CovidBrApi.Data.Collections
 {
     public class DadosCovid
     {
+        [BsonId]
+        public ObjectId Id { get; set; }
+        
         public string city { get; set; }
         public string city_ibge_code { get; set; }
 
@@ -34,6 +39,8 @@ namespace CovidBrApi.Data.Collections
 
         public long new_confirmed { get; set; }
         public long new_deaths { get; set; }
+
+        public string uId {get; set;}
 
         public DadosCovid(
                 string city,
@@ -75,6 +82,7 @@ namespace CovidBrApi.Data.Collections
           this.order_for_place = order_for_place;
           this.place_type = place_type;
           this.state = state;
+          this.uId = "";
 
         }
     }
