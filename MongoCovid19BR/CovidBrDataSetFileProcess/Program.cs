@@ -25,9 +25,10 @@ namespace CovidBrDataSetFileProcess
             // pegando o cabeçalho e lendo coluna por coluna e linha por linha
             // -- Classe do EntityFramework para salvar os dados lidos e colocar na base de dados
             // -- Classe e Domain / Controller para verificar registro por registro do csv 
-            // para ver se os dados do arquivo já não estão armazenados no banco de dados 
+            // para ver se os dados do arquivo já não estão armazenados no banco de dados, 
+            // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
-            // atualizado. 
+            // atualizado, mantendo o uId original. 
         }
     }
 }
