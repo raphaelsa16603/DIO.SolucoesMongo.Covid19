@@ -16,3 +16,7 @@
 ## EF Criação da base de dados
 - dotnet ef migrations add InitDadosCovid19BR
 - dotnet ef database update
+
+## EF Correção da base de dados
+- dotnet ef migrations add NovosCamposDadosCovid19BR
+- dotnet ef database update

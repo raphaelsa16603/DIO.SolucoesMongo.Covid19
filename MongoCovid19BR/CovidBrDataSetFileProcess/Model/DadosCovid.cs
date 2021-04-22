@@ -37,5 +37,9 @@ namespace CovidBrDataSetFileProcess.Model
         public long new_deaths { get; set; }
 
         public string uId {get; set;}
+
+        public bool dadosNovos {get; set;}
+
+        public bool dadosAtualizados {get; set;}
     }
 }
