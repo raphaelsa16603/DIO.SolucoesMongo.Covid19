@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using CursoMVC.Models;
 using CovidBrDataSetFileProcess.Model;
 
-namespace CursoMVC.Models
+namespace CovidBrDataSetFileProcess.Model
 {
     public class Context : DbContext
     {
