@@ -4,6 +4,15 @@
 ### - Raphael Simões Andrade
 
 
-# instalando o System.Configuration no projeto
-# --
+### instalando o System.Configuration no projeto
+### --
  - dotnet add package System.Configuration.ConfigurationManager --version 5.0.0
+
+### Persistência no SQLite
+### Patotes necessários
+- dotnet add package Microsoft.EntityFrameworkCore.Tools
+- dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+
+## EF Criação da base de dados
+- dotnet ef migrations add InitDadosCovid19BR
+- dotnet ef database update
