@@ -4,6 +4,7 @@ namespace CovidBrDataSetFileProcess.Model
 {
     public class DadosCovid
     {
+        public int Id { get; set; }
         public string city { get; set; }
         public string city_ibge_code { get; set; }
 
