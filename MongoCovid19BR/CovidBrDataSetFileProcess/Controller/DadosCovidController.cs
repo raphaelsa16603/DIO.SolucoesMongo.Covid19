@@ -93,7 +93,7 @@ namespace CovidBrDataSetFileProcess.Controller
             return await Get(id);
         }
 
-        // GET: Categorias/Delete/5
+        // DELETE
         public async Task<DadosCovid> Delete(int? id)
         {
             if (id == null)
