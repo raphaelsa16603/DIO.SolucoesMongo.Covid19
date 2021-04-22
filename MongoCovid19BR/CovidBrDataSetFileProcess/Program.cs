@@ -42,11 +42,11 @@ namespace CovidBrDataSetFileProcess
         }
 
         static void TesteDoProgressBar() {
-		Console.Write("Performing some task... ");
+		Console.Write("Preparando o ambiente...");
 		using (var progress = new ConsoleProgressBar()) {
 			for (int i = 0; i <= 100; i++) {
 				progress.Report((double) i / 100);
-				Thread.Sleep(20);
+				Thread.Sleep(10);
 			}
 		}
 		Console.WriteLine("Done.");
