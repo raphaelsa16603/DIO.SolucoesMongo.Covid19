@@ -27,6 +27,12 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
             using (WebClient client = new WebClient())
             {
                 Uri uri = new Uri(address);
+                // Problema para baixar o arquivo ??? De uma hora para outra
+                //  deixou de baixar o arquivo .gz do site pelo programa.
+                client.Headers["Cookie"] = "security=true";
+                client.Encoding = System.Text.Encoding.UTF8;
+                client.Headers.Add("user-agent", 
+                "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
 
                 // Specify a DownloadFileCompleted handler here...
                 // client.DownloadDataCompleted += DownloadDataCompletedCallback4;
