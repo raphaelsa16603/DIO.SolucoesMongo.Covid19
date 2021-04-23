@@ -2,6 +2,7 @@
 using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using System.Threading;
 using CovidBrDataSetFileProcess.Lib.DownLoadFile;
+using CovidBrDataSetFileProcess.Web;
 
 namespace CovidBrDataSetFileProcess
 {
@@ -11,6 +12,8 @@ namespace CovidBrDataSetFileProcess
         {
             // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
             // e pegar a data do arquivo -- Classe Ler dados da página!
+            string Data = LoadInfoUrl.GetDataUrlCovid19BrFiles();
+            System.Console.WriteLine($"Data do arquivo {Data}");
             
             // TODO: -- Classe para fazer barra de progresso na tela do console
             TesteDoProgressBar();

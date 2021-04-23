@@ -9,7 +9,7 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
 {
     public class DownLoadFile
     {
-        private ConsoleProgressBar progress;
+        private ConsoleProgressBar progress = null;
         private string currentText = string.Empty;
 
         public void DownLoadFileInBackgroundByProgBar4(string address)
