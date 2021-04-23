@@ -47,8 +47,8 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
             if(this.progress != null)
                 this.progress.Report(e.ProgressPercentage);
 
-            
-            UpdateText($"{e.ProgressPercentage} % Completo... " +
+            string barra = BarraProgressoTexto('#', 12, e.ProgressPercentage);
+            UpdateText($"{barra} - {e.ProgressPercentage} % Completo... " +
             $" Baixado {e.BytesReceived} de {e.TotalBytesToReceive} bytes...");
             
         }
@@ -79,6 +79,30 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
             Console.Write(outputBuilder);
             currentText = text;
 	    }
+
+        private string BarraProgressoTexto(char simbolo, int tamanho, double percentagem) 
+        {
+            int progress = 0;
+
+            if(percentagem > 0)
+            {
+                progress = (int) Math.Round(
+                        (tamanho * (percentagem/100)),0);
+            }
+            else if (percentagem == 0 )
+                progress = 0;
+            else if (percentagem < 0 )
+                progress = 0;
+            else if (percentagem > 100 )
+                progress = 0;
+
+			int percent = (int) (percentagem * 100);
+            string text = string.Format("[{0}{1}]",
+				new string('#', progress), 
+                new string('-', Math.Abs(tamanho - progress)));
+
+            return text;
+        }
 
         public static async void ToDo(string address)
         {
