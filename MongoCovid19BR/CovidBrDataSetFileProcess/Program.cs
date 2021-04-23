@@ -21,34 +21,46 @@ namespace CovidBrDataSetFileProcess
             // TODO: -- Classe para fazer barra de progresso na tela do console
             TesteDoProgressBar();
 
-            // TODO: Baixar o arquivo .gzip -- Classe para baixar arquivo da web
-            // Statico === 
-            // DownLoadFile.DownLoadFileInBackground4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
-            DownLoadFile DownPB = new DownLoadFile();
-            DownPB.DownLoadFileInBackgroundByProgBar4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
-
-            // TODO: Descompactar o arquivo, colocando em uma pasta temporária
-            // -- Classe para descompactar arquivo
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
             string arquivoDB = ConfigurationManager.AppSettings["file"];
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
-            CompactacaoArquivo.Decompress(pathString);
 
-
-            // TODO: Renomear o arquivo para colocar a data de processamento contida 
-            // na página no nome do arquivo ... tipo 2021-04-20 - [nome do arquivo.csv]
-            // -- Classe para tratar arquivo ???
-            DirectoryInfo directorySelected = new DirectoryInfo(diretorioDataSet);
-            foreach (FileInfo fileToCsv in directorySelected.GetFiles("*.csv"))
+            DirectoryInfo directoryData = new DirectoryInfo(diretorioDataSet);
+            bool existeArquivoCsvDoDia = false;
+            foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
             {
-                string extensao = fileToCsv.Extension;
-                string nome = fileToCsv.Name;
-                long tamanho = fileToCsv.Length;
-                string NovoNomeArquivo = System.IO.Path.Combine(
-                        fileToCsv.Directory.FullName, 
-                        Data.Trim().Replace("/","-") + " - " + nome);
-                System.Console.WriteLine(NovoNomeArquivo);
-                fileToCsv.MoveTo(NovoNomeArquivo);
+                existeArquivoCsvDoDia = 
+                    fileToCsv.FullName.Contains(Data.Trim().Replace("/","-"));
+            }
+            if(!existeArquivoCsvDoDia)
+            {
+                // TODO: Baixar o arquivo .gzip -- Classe para baixar arquivo da web
+                // Statico === 
+                // DownLoadFile.DownLoadFileInBackground4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
+                DownLoadFile DownPB = new DownLoadFile();
+                DownPB.DownLoadFileInBackgroundByProgBar4
+                    (@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
+
+                // TODO: Descompactar o arquivo, colocando em uma pasta temporária
+                // -- Classe para descompactar arquivo
+                CompactacaoArquivo.Decompress(pathString);
+
+
+                // TODO: Renomear o arquivo para colocar a data de processamento contida 
+                // na página no nome do arquivo ... tipo 2021-04-20 - [nome do arquivo.csv]
+                // -- Classe para tratar arquivo ???
+                DirectoryInfo directorySelected = new DirectoryInfo(diretorioDataSet);
+                foreach (FileInfo fileToCsv in directorySelected.GetFiles("*.csv"))
+                {
+                    string extensao = fileToCsv.Extension;
+                    string nome = fileToCsv.Name;
+                    long tamanho = fileToCsv.Length;
+                    string NovoNomeArquivo = System.IO.Path.Combine(
+                            fileToCsv.Directory.FullName, 
+                            Data.Trim().Replace("/","-") + " - " + nome);
+                    System.Console.WriteLine(NovoNomeArquivo);
+                    fileToCsv.MoveTo(NovoNomeArquivo);
+                }
             }
             
             // -- Devido ao problemas com o download do arquivo a parte de leitura do arquivo
