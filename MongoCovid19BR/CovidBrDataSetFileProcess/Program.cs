@@ -50,6 +50,9 @@ namespace CovidBrDataSetFileProcess
                 System.Console.WriteLine(NovoNomeArquivo);
                 fileToCsv.MoveTo(NovoNomeArquivo);
             }
+            
+            // -- Devido ao problemas com o download do arquivo a parte de leitura do arquivo
+            // -- csv a atualização no Banco de Dados será feito separadamente....
 
             // TODO: Ler o arquivo csv linha por linha e colocar no banco de dados local
             // Banco de dados SQLite!
