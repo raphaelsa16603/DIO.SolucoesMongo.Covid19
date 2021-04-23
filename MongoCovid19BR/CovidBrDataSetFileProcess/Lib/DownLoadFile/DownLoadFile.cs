@@ -39,7 +39,7 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
                 }
             }
             System.Console.WriteLine("Aguarde conclusão do Download...");
-            Console.ReadLine();
+            
         }
 
         private void DownloadProgressCallbackByProgBar4(object sender, DownloadProgressChangedEventArgs e)

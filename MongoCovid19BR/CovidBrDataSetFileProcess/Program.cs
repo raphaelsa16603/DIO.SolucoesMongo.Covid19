@@ -5,6 +5,7 @@ using CovidBrDataSetFileProcess.Lib.DownLoadFile;
 using CovidBrDataSetFileProcess.Web;
 using System.Configuration;
 using CovidBrDataSetFileProcess.Lib.FileTools;
+using System.IO;
 
 namespace CovidBrDataSetFileProcess
 {
@@ -36,7 +37,19 @@ namespace CovidBrDataSetFileProcess
 
             // TODO: Renomear o arquivo para colocar a data de processamento contida 
             // na página no nome do arquivo ... tipo 2021-04-20 - [nome do arquivo.csv]
-            // -- Classe para tratar arquivo
+            // -- Classe para tratar arquivo ???
+            DirectoryInfo directorySelected = new DirectoryInfo(diretorioDataSet);
+            foreach (FileInfo fileToCsv in directorySelected.GetFiles("*.csv"))
+            {
+                string extensao = fileToCsv.Extension;
+                string nome = fileToCsv.Name;
+                long tamanho = fileToCsv.Length;
+                string NovoNomeArquivo = System.IO.Path.Combine(
+                        fileToCsv.Directory.FullName, 
+                        Data.Trim().Replace("/","-") + " - " + nome);
+                System.Console.WriteLine(NovoNomeArquivo);
+                fileToCsv.MoveTo(NovoNomeArquivo);
+            }
 
             // TODO: Ler o arquivo csv linha por linha e colocar no banco de dados local
             // Banco de dados SQLite!

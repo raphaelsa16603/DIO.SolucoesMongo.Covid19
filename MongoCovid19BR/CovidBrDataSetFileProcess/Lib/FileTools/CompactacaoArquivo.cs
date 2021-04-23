@@ -38,19 +38,27 @@ namespace CovidBrDataSetFileProcess.Lib.FileTools
             public static void Decompress(string pathFileGz)
             {
                 FileInfo fileToDecompress = new FileInfo(pathFileGz);
-                using (FileStream originalFileStream = fileToDecompress.OpenRead())
+                long tamanho = fileToDecompress.Length;
+                if(tamanho > 0)
                 {
-                    string currentFileName = fileToDecompress.FullName;
-                    string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
-
-                    using (FileStream decompressedFileStream = File.Create(newFileName))
+                    using (FileStream originalFileStream = fileToDecompress.OpenRead())
                     {
-                        using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                        string currentFileName = fileToDecompress.FullName;
+                        string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                        using (FileStream decompressedFileStream = File.Create(newFileName))
                         {
-                            decompressionStream.CopyTo(decompressedFileStream);
-                            Console.WriteLine($"Decompressed: {fileToDecompress.Name}");
+                            using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                            {
+                                decompressionStream.CopyTo(decompressedFileStream);
+                                Console.WriteLine($"Decompressed: {fileToDecompress.Name}");
+                            }
                         }
                     }
+                }
+                else
+                {
+                    Console.WriteLine($"Não foi possível descompactar o arquivo: {fileToDecompress.Name}");
                 }
             }
     }
