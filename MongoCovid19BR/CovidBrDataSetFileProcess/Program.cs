@@ -3,6 +3,8 @@ using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using System.Threading;
 using CovidBrDataSetFileProcess.Lib.DownLoadFile;
 using CovidBrDataSetFileProcess.Web;
+using System.Configuration;
+using CovidBrDataSetFileProcess.Lib.FileTools;
 
 namespace CovidBrDataSetFileProcess
 {
@@ -26,6 +28,11 @@ namespace CovidBrDataSetFileProcess
 
             // TODO: Descompactar o arquivo, colocando em uma pasta temporária
             // -- Classe para descompactar arquivo
+            string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
+            string arquivoDB = ConfigurationManager.AppSettings["file"];
+            string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
+            CompactacaoArquivo.Decompress(pathString);
+
 
             // TODO: Renomear o arquivo para colocar a data de processamento contida 
             // na página no nome do arquivo ... tipo 2021-04-20 - [nome do arquivo.csv]

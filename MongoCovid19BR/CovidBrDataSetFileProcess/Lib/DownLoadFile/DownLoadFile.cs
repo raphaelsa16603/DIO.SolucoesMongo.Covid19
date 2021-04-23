@@ -132,7 +132,7 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
 
                 client.DownloadFileAsync(uri, pathString);
             }
-            Console.ReadLine();
+            
         }
 
         private static void DownloadProgressCallback4(object sender, DownloadProgressChangedEventArgs e)
