@@ -36,7 +36,7 @@ namespace CovidBrDataSetFileProcess
             {
                 // TODO: Baixar o arquivo .gzip -- Classe para baixar arquivo da web
                 // Statico === 
-                // DownLoadFile.DownLoadFileInBackground4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
+                //DownLoadFile.DownLoadFileInBackground4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
                 DownLoadFile DownPB = new DownLoadFile();
                 DownPB.DownLoadFileInBackgroundByProgBar4
                     (@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
@@ -63,12 +63,19 @@ namespace CovidBrDataSetFileProcess
                 }
             }
             
-            // -- Devido ao problemas com o download do arquivo a parte de leitura do arquivo
-            // -- csv a atualização no Banco de Dados será feito separadamente....
+            // -- Devido ao problemas com o download do arquivo a parte de leitura
+            // -- do arquivo csv a atualização no Banco de Dados será feito separadamente
 
             // TODO: Ler o arquivo csv linha por linha e colocar no banco de dados local
             // Banco de dados SQLite!
             // -- Classe para ler arquivo texto ou csv
+            DirectoryInfo directoryFilesCsv = new DirectoryInfo(diretorioDataSet);
+
+            foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+            {
+                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, processarArqCsv);
+            }
+            
             // -- Classe para ler dados do arquivo csv, 
             // pegando o cabeçalho e lendo coluna por coluna e linha por linha
             // -- Classe do EntityFramework para salvar os dados lidos e colocar na base de dados
@@ -77,6 +84,15 @@ namespace CovidBrDataSetFileProcess
             // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
+        }
+
+        static void processarArqCsv( string [] listaCampos)  
+        {
+            foreach (string campo in listaCampos)
+            {
+                System.Console.Write(" [" + campo + "] ");
+            }
+            System.Console.WriteLine("");
         }
 
         static void TesteDoProgressBar() {
