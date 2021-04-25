@@ -29,10 +29,10 @@ namespace CovidBrDataSetFileProcess.Business
                     " - Import DataSet ERRO.csv";
             fileErroCsv = System.IO.Path.Combine(diretorioDataErro, FileName);
 
-            string FileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
+            string FileNameLimpeza = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
                     .Replace("/","-").Replace(":","_") +
                     " - Import DataSet ERRO na Limpeza.csv";
-            fileErroCsvLimpeza = System.IO.Path.Combine(diretorioDataErro, FileName);
+            fileErroCsvLimpeza = System.IO.Path.Combine(diretorioDataErro, FileNameLimpeza);
 
             string diretorioDataSetLimpo = ConfigurationManager.AppSettings["dirCsvLimpo"];
             // Criar Diretório se não existe
