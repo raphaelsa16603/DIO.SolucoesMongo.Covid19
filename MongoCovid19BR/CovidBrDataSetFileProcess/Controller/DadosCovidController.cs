@@ -96,7 +96,7 @@ namespace CovidBrDataSetFileProcess.Controller
                 " - Code: " + exSql.SqliteErrorCode + 
                 " - Status: " + exSql.SqlState, exSql);
             }
-            catch (System.Exception ex)
+            catch (System.Exception) // ex)
             {
                 //throw new System.Exception(ex.Message, ex);
                 Dados = null;
