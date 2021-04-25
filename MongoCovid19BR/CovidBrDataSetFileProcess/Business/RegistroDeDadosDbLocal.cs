@@ -18,6 +18,10 @@ namespace CovidBrDataSetFileProcess.Business
         public RegistroDeDadosDbLocal()
         {
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
+            // Criar Diretório se não existe
+            if(!System.IO.Directory.Exists(diretorioDataErro))
+                System.IO.Directory.CreateDirectory(diretorioDataErro);
+
             string FileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
                     .Replace("/","-").Replace(":","_") +
                     " - Import DataSet ERRO.csv";
