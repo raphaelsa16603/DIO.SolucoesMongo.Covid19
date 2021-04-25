@@ -313,6 +313,7 @@ namespace CovidBrDataSetFileProcess.Business
                     // Registrar dados não incluido no DB
                     ErroToFileDataErro(listaCampos);
                 }
+                
 
                 if(oDado != null)
                 {
@@ -326,20 +327,20 @@ namespace CovidBrDataSetFileProcess.Business
                         LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
                     }
                 }
-                else 
-                {
-                    SalvarCamposNovoArquivoCsvLimpo(listaCampos);
-                }
-
-                int percentagem = (int)Math.Round
-                        (((double)(contador)) / ((double)totallinhas) * 100, 0);
-                var barra = tools.BarraProgressoTexto
-                        ('#', 30, (int)(percentagem));
-                // System.Console.WriteLine($"{barra} - " +
-                //     $"{(int)(percentagem)}% - {contador} de {totallinhas}");
-                tools.UpdateText($"{barra} - " + 
-                    $"{(int) (percentagem)}% - {contador} de {totallinhas}");
             }
+            else 
+            {
+                SalvarCamposNovoArquivoCsvLimpo(listaCampos);
+            }
+            int percentagem = (int)Math.Round
+                    (((double)(contador)) / ((double)totallinhas) * 100, 0);
+            var barra = tools.BarraProgressoTexto
+                    ('#', 30, (int)(percentagem));
+            // System.Console.WriteLine($"{barra} - " +
+            //     $"{(int)(percentagem)}% - {contador} de {totallinhas}");
+            tools.UpdateText($"{barra} - " + 
+                $"{(int) (percentagem)}% - {contador} de {totallinhas}");
+
         }
 
         private async void SalvarCamposNovoArquivoCsvLimpo( string [] listaCampos )
