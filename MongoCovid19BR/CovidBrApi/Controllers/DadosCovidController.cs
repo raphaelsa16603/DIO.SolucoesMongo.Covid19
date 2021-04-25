@@ -45,6 +45,35 @@ namespace CovidBrApi.Controllers
             }
         }
 
+
+        [HttpDelete("{city_ibge_code},{dia},{mes},{ano}")]
+        public async void Delete(string city_ibge_code, 
+                    string dia, string mes, string ano)
+        {
+            var filters = new List<FilterDefinition<DadosCovid>>();
+            var DateFilter = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia)).AddDays(-1);
+            var DateFilterEnd = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia));
+            var filter1 = Builders<DadosCovid>.Filter.Eq
+                    (inf => inf.city_ibge_code, city_ibge_code);
+            var filter2 = Builders<DadosCovid>.Filter.Gt
+                    (inf => inf.date, DateFilter);        
+            var filter3 = Builders<DadosCovid>.Filter.Lt
+                    (inf => inf.date, DateFilterEnd);
+            filters.Add(filter1);
+            filters.Add(filter2);
+            filters.Add(filter3);
+            var complexFilter = Builders<DadosCovid>.Filter.And(filters);
+
+            try
+            {
+                var result = await  _dadosCovidCollection.DeleteOneAsync(complexFilter);
+            }
+            catch (System.Exception) //(System.Exception ex)
+            {
+                //$"Banco de Dados Falhou : {ex.Message}"
+            }
+        }
+
         
         [HttpPut("{city_ibge_code},{dia},{mes},{ano}")]
         public async Task<IActionResult> AtualizarDados
