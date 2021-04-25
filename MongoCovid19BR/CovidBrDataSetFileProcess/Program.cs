@@ -72,7 +72,10 @@ namespace CovidBrDataSetFileProcess
             // TODO: Ler o arquivo csv linha por linha e colocar no banco de dados local
             // Banco de dados SQLite!
             // -- Classe para ler arquivo texto ou csv
-            System.Console.WriteLine("----------------------------------------------");
+            System.Console.WriteLine("----------------------------------------------------");
+            System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
+            System.Console.WriteLine("----------------------------------------------------");
+            
             DirectoryInfo directoryFilesCsv = new DirectoryInfo(diretorioDataSet);
             var ForDb = new RegistroDeDadosDbLocal();
             foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))

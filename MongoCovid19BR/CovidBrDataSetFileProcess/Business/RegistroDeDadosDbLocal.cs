@@ -36,7 +36,7 @@ namespace CovidBrDataSetFileProcess.Business
                     oDado = new DadosCovid();
                     ExtrairDadosDoCvsParaDb(listaCampos, oDado);
 
-                    System.Console.WriteLine(oDado.ToString());
+                    //System.Console.WriteLine(oDado.ToString());
 
                 }
                 catch (System.Exception ex)
