@@ -212,7 +212,7 @@ namespace CovidBrDataSetFileProcess.Business
             oDado.dadosAtualizados = false;
         }
 
-        private void ErroToFileDataErro( string [] listaCampos )
+        private async void ErroToFileDataErro( string [] listaCampos )
         {
             string textoCsv = "";
             foreach (string campo in listaCampos)
@@ -223,14 +223,14 @@ namespace CovidBrDataSetFileProcess.Business
             {
                 using (var stream = new StreamWriter(fileErroCsv))
                 {
-                    stream.WriteLine(textoCsv);
+                    await stream.WriteLineAsync(textoCsv);
                 }
             }
             else
             {
                 using (StreamWriter sw = File.AppendText(fileErroCsv))
                 {
-                    sw.WriteLine(textoCsv);
+                    await sw.WriteLineAsync(textoCsv);
                 }
             }
         }

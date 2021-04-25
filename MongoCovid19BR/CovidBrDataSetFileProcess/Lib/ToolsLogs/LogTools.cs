@@ -7,7 +7,7 @@ namespace CovidBrDataSetFileProcess.Lib.ToolsLogs
     public class LogTools
     {
         
-        public static void LogErroToFile( string mensagem, string dadosDoErro)
+        public static async void LogErroToFile( string mensagem, string dadosDoErro)
         {
             string diretorioLog = ConfigurationManager.AppSettings["dirlog"];
             // Criar Diretório se não existe
@@ -24,14 +24,14 @@ namespace CovidBrDataSetFileProcess.Lib.ToolsLogs
             {
                 using (var stream = new StreamWriter(fileErroLog))
                 {
-                    stream.WriteLine(textoCsv);
+                    await stream.WriteLineAsync(textoCsv);
                 }
             }
             else
             {
                 using (StreamWriter sw = File.AppendText(fileErroLog))
                 {
-                    sw.WriteLine(textoCsv);
+                    await sw.WriteLineAsync(textoCsv);
                 }
             }
         }
