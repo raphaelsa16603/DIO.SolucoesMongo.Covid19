@@ -6,11 +6,14 @@ using CovidBrDataSetFileProcess.Web;
 using System.Configuration;
 using CovidBrDataSetFileProcess.Lib.FileTools;
 using System.IO;
+using CovidBrDataSetFileProcess.Business;
 
 namespace CovidBrDataSetFileProcess
 {
     class Program
     {
+        
+        
         static void Main(string[] args)
         {
             // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
@@ -69,11 +72,12 @@ namespace CovidBrDataSetFileProcess
             // TODO: Ler o arquivo csv linha por linha e colocar no banco de dados local
             // Banco de dados SQLite!
             // -- Classe para ler arquivo texto ou csv
+            System.Console.WriteLine("----------------------------------------------");
             DirectoryInfo directoryFilesCsv = new DirectoryInfo(diretorioDataSet);
-
+            var ForDb = new RegistroDeDadosDbLocal();
             foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
             {
-                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, processarArqCsv);
+                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
             }
             
             // -- Classe para ler dados do arquivo csv, 
@@ -86,13 +90,29 @@ namespace CovidBrDataSetFileProcess
             // atualizado, mantendo o uId original. 
         }
 
-        static void processarArqCsv( string [] listaCampos)  
+        static void processarArqCsv( string [] listaCampos, long contador, long totallinhas)  
         {
             foreach (string campo in listaCampos)
             {
-                System.Console.Write(" [" + campo + "] ");
+                System.Console.Write(" [" + campo + "]");
             }
-            System.Console.WriteLine("");
+            System.Console.WriteLine( " - Linha[" + 
+                contador + "] do total [" + totallinhas + "]");
+        }
+
+        static void processarArqCsvBarraProgresso( string [] listaCampos, long contador, long totallinhas)  
+        {
+            foreach (string campo in listaCampos)
+            {
+                //System.Console.Write(" [" + campo + "]");
+            }
+            ToolsProgressBar tools = new ToolsProgressBar();
+            int percentagem = (int)Math.Round
+                (((double)(contador))/((double)totallinhas) * 100, 0);
+            var barra = tools.BarraProgressoTexto
+                    ('#', 12, (int) (percentagem));
+            System.Console.WriteLine($"{barra} - " + 
+                $"{(int) (percentagem)}% - {contador} de {totallinhas}");
         }
 
         static void TesteDoProgressBar() {

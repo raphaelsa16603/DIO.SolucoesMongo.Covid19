@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CovidBrDataSetFileProcess.Model;
 using Microsoft.Data.Sqlite;
@@ -62,6 +64,48 @@ namespace CovidBrDataSetFileProcess.Controller
             if (Dados == null)
             {
                 throw new System.Exception("Registro não localizado");
+            }
+
+            return Dados;
+        }
+
+        public async Task<DadosCovid> Pesquisa(DadosCovid obj)
+        {
+            if (obj == null)
+            {
+                throw new System.Exception("Sem o Objeto de Dados para pesquisa do registro");
+            }
+
+            if( obj.city_ibge_code.Trim().Equals(""))
+            {
+                throw new System.Exception("Sem  city_ibge_code para pesquisa do registro");
+            }
+
+                        
+            DadosCovid Dados;
+            try
+            {
+                //var query = from dados in _context.Set<DadosCovid>().Where;
+                Dados = await _context.OsDadosDoCovid.SingleAsync
+                (b => b.city_ibge_code == obj.city_ibge_code.Trim() &&
+                      b.date.CompareTo(obj.date) == 0);
+            }
+            catch (SqliteException exSql)
+            {
+                throw new System.Exception(exSql.Message  + 
+                " - Code: " + exSql.SqliteErrorCode + 
+                " - Status: " + exSql.SqlState, exSql);
+            }
+            catch (System.Exception ex)
+            {
+                //throw new System.Exception(ex.Message, ex);
+                Dados = null;
+            }
+
+            if (Dados == null)
+            {
+                //throw new System.Exception("Registro não localizado");
+                Dados = null;
             }
 
             return Dados;

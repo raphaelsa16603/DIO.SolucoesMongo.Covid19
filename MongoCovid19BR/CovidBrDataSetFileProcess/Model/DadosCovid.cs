@@ -41,5 +41,30 @@ namespace CovidBrDataSetFileProcess.Model
         public bool dadosNovos {get; set;}
 
         public bool dadosAtualizados {get; set;}
+
+        public override string ToString()
+        {
+            return $"{{\n" + 
+                   $"\"city\": \"{city}\",\n" +
+                   $"\"city_ibge_code\": \"{city_ibge_code}\",\n" +
+                   $"\"date\": \"{date}\",\n" +
+                   $"\"epidemiological_week\": \"{epidemiological_week}\",\n" +
+                   $"\"estimated_population\": \"{estimated_population}\",\n" +
+                   $"\"estimated_population_2019\": \"{estimated_population_2019}\",\n" +
+                   $"\"is_last\": \"{is_last}\",\n" +
+                   $"\"is_repeated\": \"{is_repeated}\",\n" +
+                   $"\"city_ibglast_available_confirmede_code\": \"{city_ibglast_available_confirmede_code}\",\n" +
+                   $"\"last_available_confirmed_per_100k_inhabitants\": \"{last_available_confirmed_per_100k_inhabitants}\",\n" +
+                   $"\"last_available_date\": \"{last_available_date}\",\n" +
+                   $"\"last_available_death_rate\": \"{last_available_death_rate}\",\n" +
+                   $"\"last_available_deaths\": \"{last_available_deaths}\",\n" +
+                   $"\"order_for_place\": \"{order_for_place}\",\n" +
+                   $"\"place_type\": \"{place_type}\",\n" +
+                   $"\"state\": \"{state}\",\n" +
+                   $"\"new_confirmed\": \"{new_confirmed}\",\n" +
+                   $"\"new_deaths\": \"{new_deaths}\"\n" +
+                   "}";
+ 
+       }
     }
 }
