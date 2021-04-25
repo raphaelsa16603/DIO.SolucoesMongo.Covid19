@@ -4,7 +4,7 @@ using System.IO;
 using CovidBrDataSetFileProcess.Controller;
 using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using CovidBrDataSetFileProcess.Model;
-using CovidBrDataSetFileProcess.Lib.Logs;
+using CovidBrDataSetFileProcess.Lib.ToolsLogs;
 
 namespace CovidBrDataSetFileProcess.Business
 {
