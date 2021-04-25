@@ -76,6 +76,9 @@ namespace CovidBrDataSetFileProcess
                 }
             }
             
+            /* --- Registrar os dados do CSV no banco de dados SQLite é muito lento
+            // --- Solução é enviar os dados diretamente para a API RestFull
+
             // -- Devido ao problemas com o download do arquivo a parte de leitura
             // -- do arquivo csv a atualização no Banco de Dados será feito separadamente
 
@@ -94,6 +97,8 @@ namespace CovidBrDataSetFileProcess
             // atualizado, mantendo o uId original. 
             var ForDb = new RegistroDeDadosDbLocal();
 
+            /* --- Limpar o arquivo CSV para importar pelo MongoDB Compass não funciona
+            // --- Importação limitada a 8.000 registros ....
             System.Console.WriteLine("----------------------------------------------------");
             System.Console.WriteLine("Limpando Arquivo CVS com dados válidos...");
             System.Console.WriteLine("----------------------------------------------------");
@@ -103,7 +108,9 @@ namespace CovidBrDataSetFileProcess
                 ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNovoArquivoCsvLimpo);
             }
             System.Console.WriteLine("\n");
+            */
 
+            /*
             System.Console.WriteLine("----------------------------------------------------");
             System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
             System.Console.WriteLine("----------------------------------------------------");
@@ -113,6 +120,10 @@ namespace CovidBrDataSetFileProcess
                 ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
             }
             System.Console.WriteLine("\n");
+            */
+
+
+            // TODO: Precessar o arquivo CSV e enviar para a API Rest com MongoDB
         }
 
 
