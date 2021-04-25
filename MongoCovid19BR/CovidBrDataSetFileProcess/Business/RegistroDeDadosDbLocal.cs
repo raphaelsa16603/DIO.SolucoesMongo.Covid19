@@ -12,6 +12,7 @@ namespace CovidBrDataSetFileProcess.Business
     {
         ToolsProgressBar tools = new ToolsProgressBar();
         string fileErroCsv = "";
+        string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
 
         DadosCovidController controller;
@@ -27,6 +28,11 @@ namespace CovidBrDataSetFileProcess.Business
                     .Replace("/","-").Replace(":","_") +
                     " - Import DataSet ERRO.csv";
             fileErroCsv = System.IO.Path.Combine(diretorioDataErro, FileName);
+
+            string FileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
+                    .Replace("/","-").Replace(":","_") +
+                    " - Import DataSet ERRO na Limpeza.csv";
+            fileErroCsvLimpeza = System.IO.Path.Combine(diretorioDataErro, FileName);
 
             string diretorioDataSetLimpo = ConfigurationManager.AppSettings["dirCsvLimpo"];
             // Criar Diretório se não existe
@@ -311,7 +317,7 @@ namespace CovidBrDataSetFileProcess.Business
                     LogTools.LogErroToFile(registro, "...");
                     LogTools.LogErroToFile("________________________________________","");
                     // Registrar dados não incluido no DB
-                    ErroToFileDataErro(listaCampos);
+                    ErroToFileDataErroLimpeza(listaCampos);
                 }
                 
 
@@ -360,6 +366,29 @@ namespace CovidBrDataSetFileProcess.Business
             else
             {
                 using (StreamWriter sw = File.AppendText(fileCsvLimpo))
+                {
+                    await sw.WriteLineAsync(textoCsv);
+                }
+            }
+        }
+
+        private async void ErroToFileDataErroLimpeza( string [] listaCampos )
+        {
+            string textoCsv = "";
+            foreach (string campo in listaCampos)
+            {
+                textoCsv += $"{campo},";
+            }
+            if (!File.Exists(fileErroCsvLimpeza))
+            {
+                using (var stream = new StreamWriter(fileErroCsvLimpeza))
+                {
+                    await stream.WriteLineAsync(textoCsv);
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = File.AppendText(fileErroCsvLimpeza))
                 {
                     await sw.WriteLineAsync(textoCsv);
                 }
