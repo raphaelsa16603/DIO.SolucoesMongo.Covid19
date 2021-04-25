@@ -4,6 +4,7 @@ using System.IO;
 using CovidBrDataSetFileProcess.Controller;
 using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using CovidBrDataSetFileProcess.Model;
+using CovidBrDataSetFileProcess.Lib.Logs;
 
 namespace CovidBrDataSetFileProcess.Business
 {
@@ -41,21 +42,36 @@ namespace CovidBrDataSetFileProcess.Business
                 }
                 catch (System.Exception ex)
                 {
-                    System.Console.WriteLine("________________________________________");
-                    System.Console.WriteLine($"ERRO IMPORTAÇÃO: {ex.Message}");
+                    // Registrar no arquivo de log ...
+                    LogTools.LogErroToFile
+                        ($"Erro ao registrar dados no DB: {ex.Message}", ex.StackTrace);
+                    LogTools.LogErroToFile("________________________________________", "");
+                    LogTools.LogErroToFile($"ERRO IMPORTAÇÃO: {ex.Message}", "");
+                    string registro = "";
                     foreach (string campo in listaCampos)
                     {
-                        System.Console.Write(" [" + campo + "]");
+                        registro += $"{campo},";
                     }
-                    System.Console.WriteLine("\n________________________________________");
+                    LogTools.LogErroToFile(registro, "...");
+                    LogTools.LogErroToFile("________________________________________","");
+                    // Registrar dados não incluido no DB
                     ErroToFileDataErro(listaCampos);
                 }
 
                 if(oDado != null)
                 {
-                    DadosCovid DbObj = await controller.Pesquisa(oDado);
-                    if (DbObj == null)
-                        controller.Cadastro(oDado);
+                    try
+                    {
+                        DadosCovid DbObj = await controller.Pesquisa(oDado);
+                        if (DbObj == null)
+                            controller.Cadastro(oDado);
+                    
+                    }
+                    catch (System.Exception ex)
+                    {
+                        // Se der erro é para registrar em arquivo de log
+                        LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                    }
                 }
 
                 int percentagem = (int)Math.Round
