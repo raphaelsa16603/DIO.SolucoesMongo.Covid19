@@ -17,12 +17,13 @@ namespace CovidBrDataSetFileProcess.Controller
         }
 
         // POST
-        public async void Cadastro(DadosCovid obj)
+        public async Task<int> Cadastro(DadosCovid obj)
         {
+            int codigo = 0;
             try
             {
                 _context.Add(obj);
-                await _context.SaveChangesAsync();
+                codigo = await _context.SaveChangesAsync();
             }
             catch (SqliteException exSql)
             {
@@ -35,6 +36,7 @@ namespace CovidBrDataSetFileProcess.Controller
                 throw new System.Exception(ex.Message, ex);
             }
             
+            return codigo;
         }
 
         // GET

@@ -17,10 +17,11 @@ namespace CovidBrDataSetFileProcess.Business
 
         public RegistroDeDadosDbLocal()
         {
-            string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
-            string FileName = DateTime.Now.ToString().Replace("/","-").Replace(":","_") +
+            string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
+            string FileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
+                    .Replace("/","-").Replace(":","_") +
                     " - Import DataSet ERRO.csv";
-            fileErroCsv = System.IO.Path.Combine(diretorioDataSet, FileName);
+            fileErroCsv = System.IO.Path.Combine(diretorioDataErro, FileName);
 
             controller = new DadosCovidController(new Context());
         }
@@ -60,12 +61,12 @@ namespace CovidBrDataSetFileProcess.Business
 
                 if(oDado != null)
                 {
+                    int codigo = 0;
                     try
                     {
                         DadosCovid DbObj = await controller.Pesquisa(oDado);
                         if (DbObj == null)
-                            controller.Cadastro(oDado);
-                    
+                            codigo = await controller.Cadastro(oDado);
                     }
                     catch (System.Exception ex)
                     {

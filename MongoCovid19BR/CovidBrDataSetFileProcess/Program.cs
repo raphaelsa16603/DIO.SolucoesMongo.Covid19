@@ -2,7 +2,7 @@
 using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using System.Threading;
 using CovidBrDataSetFileProcess.Lib.DownLoadFile;
-using CovidBrDataSetFileProcess.Web;
+using CovidBrDataSetFileProcess.Lib.Web;
 using System.Configuration;
 using CovidBrDataSetFileProcess.Lib.FileTools;
 using System.IO;

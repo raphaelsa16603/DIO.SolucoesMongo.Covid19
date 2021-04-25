@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace CovidBrDataSetFileProcess.Web
+namespace CovidBrDataSetFileProcess.Lib.Web
 {
     public class LoadInfoUrl
     {
