@@ -25,6 +25,9 @@ namespace CovidBrDataSetFileProcess
             TesteDoProgressBar();
 
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
+            // Criar Diretório se não existe
+            if(!System.IO.Directory.Exists(diretorioDataSet))
+                System.IO.Directory.CreateDirectory(diretorioDataSet);
             string arquivoDB = ConfigurationManager.AppSettings["file"];
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
 
@@ -37,6 +40,12 @@ namespace CovidBrDataSetFileProcess
             }
             if(!existeArquivoCsvDoDia)
             {
+                // Se arquivo do dia não existe então remove todos os outros *.csv da pasta
+                directoryData = new DirectoryInfo(diretorioDataSet);
+                foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
+                {
+                    fileToCsv.Delete();
+                }
                 // TODO: Baixar o arquivo .gzip -- Classe para baixar arquivo da web
                 // Statico === 
                 //DownLoadFile.DownLoadFileInBackground4(@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
@@ -44,6 +53,7 @@ namespace CovidBrDataSetFileProcess
                 DownPB.DownLoadFileInBackgroundByProgBar4
                     (@"https://data.brasil.io/dataset/covid19/caso_full.csv.gz");
 
+                
                 // TODO: Descompactar o arquivo, colocando em uma pasta temporária
                 // -- Classe para descompactar arquivo
                 CompactacaoArquivo.Decompress(pathString);
@@ -72,17 +82,8 @@ namespace CovidBrDataSetFileProcess
             // TODO: Ler o arquivo csv linha por linha e colocar no banco de dados local
             // Banco de dados SQLite!
             // -- Classe para ler arquivo texto ou csv
-            System.Console.WriteLine("----------------------------------------------------");
-            System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
-            System.Console.WriteLine("----------------------------------------------------");
             
             DirectoryInfo directoryFilesCsv = new DirectoryInfo(diretorioDataSet);
-            var ForDb = new RegistroDeDadosDbLocal();
-            foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
-            {
-                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
-            }
-            
             // -- Classe para ler dados do arquivo csv, 
             // pegando o cabeçalho e lendo coluna por coluna e linha por linha
             // -- Classe do EntityFramework para salvar os dados lidos e colocar na base de dados
@@ -91,7 +92,30 @@ namespace CovidBrDataSetFileProcess
             // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
+            var ForDb = new RegistroDeDadosDbLocal();
+
+            System.Console.WriteLine("----------------------------------------------------");
+            System.Console.WriteLine("Limpando Arquivo CVS com dados válidos...");
+            System.Console.WriteLine("----------------------------------------------------");
+            // Processando os arquivos csv e colocando no Banco de Dados SQLite
+            foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+            {
+                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNovoArquivoCsvLimpo);
+            }
+            System.Console.WriteLine("\n");
+
+            System.Console.WriteLine("----------------------------------------------------");
+            System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
+            System.Console.WriteLine("----------------------------------------------------");
+            // Processando os arquivos csv e colocando no Banco de Dados SQLite
+            foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+            {
+                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
+            }
+            System.Console.WriteLine("\n");
         }
+
+
 
         static void processarArqCsv( string [] listaCampos, long contador, long totallinhas)  
         {

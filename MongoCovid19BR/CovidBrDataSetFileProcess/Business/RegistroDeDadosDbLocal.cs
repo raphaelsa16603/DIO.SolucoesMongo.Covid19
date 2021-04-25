@@ -12,6 +12,7 @@ namespace CovidBrDataSetFileProcess.Business
     {
         ToolsProgressBar tools = new ToolsProgressBar();
         string fileErroCsv = "";
+        string fileCsvLimpo = "";
 
         DadosCovidController controller;
 
@@ -26,6 +27,17 @@ namespace CovidBrDataSetFileProcess.Business
                     .Replace("/","-").Replace(":","_") +
                     " - Import DataSet ERRO.csv";
             fileErroCsv = System.IO.Path.Combine(diretorioDataErro, FileName);
+
+            string diretorioDataSetLimpo = ConfigurationManager.AppSettings["dirCsvLimpo"];
+            // Criar Diretório se não existe
+            if(!System.IO.Directory.Exists(diretorioDataSetLimpo))
+                System.IO.Directory.CreateDirectory(diretorioDataSetLimpo);
+
+            string FileNameLimpo = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
+                    .Replace("/","-").Replace(":","_") +
+                    " - DataSet Tratado e Limpo.csv";
+            
+            fileCsvLimpo = System.IO.Path.Combine(diretorioDataSetLimpo, FileNameLimpo);
 
             controller = new DadosCovidController(new Context());
         }
@@ -266,6 +278,87 @@ namespace CovidBrDataSetFileProcess.Business
             }
             
             return iRet;
+        }
+
+
+        public void processarArqCsvInserirNovoArquivoCsvLimpo( string [] listaCampos, long contador, long totallinhas)  
+        {
+            DadosCovid oDado = null;
+            if(contador > 1)
+            {
+                try
+                {
+
+                    // Preencher Classe de Dados
+                    oDado = new DadosCovid();
+                    ExtrairDadosDoCvsParaDb(listaCampos, oDado);
+
+                    //System.Console.WriteLine(oDado.ToString());
+
+                }
+                catch (System.Exception ex)
+                {
+                    // Registrar no arquivo de log ...
+                    LogTools.LogErroToFile
+                        ($"Erro ao registrar dados no DB: {ex.Message}", ex.StackTrace);
+                    LogTools.LogErroToFile("________________________________________", "");
+                    LogTools.LogErroToFile($"ERRO IMPORTAÇÃO: {ex.Message}", "");
+                    string registro = "";
+                    foreach (string campo in listaCampos)
+                    {
+                        registro += $"{campo},";
+                    }
+                    LogTools.LogErroToFile(registro, "...");
+                    LogTools.LogErroToFile("________________________________________","");
+                    // Registrar dados não incluido no DB
+                    ErroToFileDataErro(listaCampos);
+                }
+
+                if(oDado != null)
+                {
+                    try
+                    {
+                        SalvarCamposNovoArquivoCsvLimpo(listaCampos);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        // Se der erro é para registrar em arquivo de log
+                        LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                    }
+                }
+
+                int percentagem = (int)Math.Round
+                        (((double)(contador)) / ((double)totallinhas) * 100, 0);
+                var barra = tools.BarraProgressoTexto
+                        ('#', 30, (int)(percentagem));
+                // System.Console.WriteLine($"{barra} - " +
+                //     $"{(int)(percentagem)}% - {contador} de {totallinhas}");
+                tools.UpdateText($"{barra} - " + 
+                    $"{(int) (percentagem)}% - {contador} de {totallinhas}");
+            }
+        }
+
+        private async void SalvarCamposNovoArquivoCsvLimpo( string [] listaCampos )
+        {
+            string textoCsv = "";
+            foreach (string campo in listaCampos)
+            {
+                textoCsv += $"{campo},";
+            }
+            if (!File.Exists(fileCsvLimpo))
+            {
+                using (var stream = new StreamWriter(fileCsvLimpo))
+                {
+                    await stream.WriteLineAsync(textoCsv);
+                }
+            }
+            else
+            {
+                using (StreamWriter sw = File.AppendText(fileCsvLimpo))
+                {
+                    await sw.WriteLineAsync(textoCsv);
+                }
+            }
         }
 
     }
