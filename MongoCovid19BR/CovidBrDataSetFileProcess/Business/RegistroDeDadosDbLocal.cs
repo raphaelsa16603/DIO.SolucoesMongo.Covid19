@@ -326,6 +326,10 @@ namespace CovidBrDataSetFileProcess.Business
                         LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
                     }
                 }
+                else 
+                {
+                    SalvarCamposNovoArquivoCsvLimpo(listaCampos);
+                }
 
                 int percentagem = (int)Math.Round
                         (((double)(contador)) / ((double)totallinhas) * 100, 0);
