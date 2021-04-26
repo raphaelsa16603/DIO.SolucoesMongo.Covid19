@@ -130,9 +130,13 @@ namespace CovidBrProcessFileToMongoDb.Controller
             filters.Add(filter2);
             filters.Add(filter3);
             var complexFilter = Builders<DadosCovid>.Filter.And(filters);
+
             try
             {
+                // Não estou conseguindo debugar o erro da pesquisa
+                // Trava tudo e não passa nem no catch
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
+                
                 var DadosList = oDadosCovid.ToList();
                 Dados = DadosList[0];
             
