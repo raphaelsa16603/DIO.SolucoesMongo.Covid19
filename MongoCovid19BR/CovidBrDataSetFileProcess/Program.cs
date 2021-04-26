@@ -76,7 +76,7 @@ namespace CovidBrDataSetFileProcess
                 }
             }
             
-            /* --- Registrar os dados do CSV no banco de dados SQLite é muito lento
+            // --- Registrar os dados do CSV no banco de dados SQLite é muito lento
             // --- Solução é enviar os dados diretamente para a API RestFull
 
             // -- Devido ao problemas com o download do arquivo a parte de leitura
@@ -110,7 +110,7 @@ namespace CovidBrDataSetFileProcess
             System.Console.WriteLine("\n");
             */
 
-            /*
+            
             System.Console.WriteLine("----------------------------------------------------");
             System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
             System.Console.WriteLine("----------------------------------------------------");
@@ -120,7 +120,7 @@ namespace CovidBrDataSetFileProcess
                 ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
             }
             System.Console.WriteLine("\n");
-            */
+            
 
 
             // TODO: Precessar o arquivo CSV e enviar para a API Rest com MongoDB
