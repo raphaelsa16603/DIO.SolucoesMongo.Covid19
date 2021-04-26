@@ -109,9 +109,9 @@ namespace CovidBrProcessFileToMongoDb
             */
 
             
-            System.Console.WriteLine("----------------------------------------------------");
-            System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
-            System.Console.WriteLine("----------------------------------------------------");
+            System.Console.WriteLine("-------------------------------------------------------");
+            System.Console.WriteLine("Atualizando Banco de Dados ModoDB Atlas com novos dados");
+            System.Console.WriteLine("-------------------------------------------------------");
             // Processando os arquivos csv e colocando no Banco de Dados MongoDB
             foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
             {
