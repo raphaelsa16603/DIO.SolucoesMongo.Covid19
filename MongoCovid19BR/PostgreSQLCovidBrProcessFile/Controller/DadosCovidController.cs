@@ -27,9 +27,21 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             }
             catch (NpgsqlException exSql)
             {
-                throw new System.Exception(exSql.Message  + 
-                " - Code: " + exSql.ErrorCode + 
-                " - Status: " + exSql.SqlState, exSql);
+                try
+                {
+                    // Sincrono...
+                    codigo = _context.SaveChanges();    
+                }
+                catch (NpgsqlException exSql2)
+                {
+                    throw new System.Exception(exSql2.Message  + 
+                    " - Code: " + exSql2.ErrorCode + 
+                    " - Status: " + exSql2.SqlState, exSql);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new System.Exception(ex.Message, exSql);
+                }
             }
             catch (System.Exception ex)
             {
