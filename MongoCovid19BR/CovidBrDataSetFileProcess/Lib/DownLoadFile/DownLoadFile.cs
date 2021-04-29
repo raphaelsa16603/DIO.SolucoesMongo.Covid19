@@ -4,6 +4,7 @@ using System.Text;
 using System.Configuration;
 using System.Threading.Tasks;
 using CovidBrDataSetFileProcess.Lib.ProgressBar;
+using System.IO;
 
 namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
 {
@@ -41,7 +42,33 @@ namespace CovidBrDataSetFileProcess.Lib.DownLoadFile
 
                 using (ConsoleProgressBar progress = new ConsoleProgressBar())
                 {
-                    client.DownloadFileAsync(uri, pathString);
+                    try
+                    {
+                        client.DownloadFileAsync(uri, pathString);    
+                    }
+                    catch (System.Exception ex)
+                    {
+                        System.Console.WriteLine($"Erro no Dowload {ex.Message}!");
+                        client.DownloadFile(uri, pathString);
+                    }
+                }
+            }
+            // Tentativas extras de fazer o donwload sincrono
+            FileInfo fi = new FileInfo(pathString);
+            if(fi == null)
+            {
+                using (WebClient client = new WebClient())
+                {
+                    Uri uri = new Uri(address);
+                    client.DownloadFile(uri, pathString);
+                }
+            }
+            else if( fi.Length <= 0 )
+            {
+                using (WebClient client = new WebClient())
+                {
+                    Uri uri = new Uri(address);
+                    client.DownloadFile(uri, pathString);
                 }
             }
             System.Console.WriteLine("Aguarde conclusão do Download...");

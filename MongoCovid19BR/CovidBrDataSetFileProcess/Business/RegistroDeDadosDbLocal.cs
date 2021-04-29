@@ -45,10 +45,10 @@ namespace CovidBrDataSetFileProcess.Business
             
             fileCsvLimpo = System.IO.Path.Combine(diretorioDataSetLimpo, FileNameLimpo);
 
-            controller = new DadosCovidController(new Context());
+            controller = DadosCovidController.GetInstance(new Context());
         }
         
-        public async void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
+        public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
         {
             DadosCovid oDado = null;
             if(contador > 1)
@@ -86,9 +86,12 @@ namespace CovidBrDataSetFileProcess.Business
                     int codigo = 0;
                     try
                     {
-                        DadosCovid DbObj = await controller.Pesquisa(oDado);
+                        DadosCovid DbObj = controller.Pesquisa(oDado);
                         if (DbObj == null)
-                            codigo = await controller.Cadastro(oDado);
+                            if(contador < totallinhas)
+                                codigo = controller.Cadastro(oDado);
+                            else
+                                codigo = controller.CadastroSimples(oDado);
                     }
                     catch (System.Exception ex)
                     {

@@ -10,20 +10,62 @@ namespace CovidBrDataSetFileProcess.Controller
     public class DadosCovidController
     {
         private readonly Context _context;
+        private int _registros;
+        private readonly int _cache = 5000;
 
-        public DadosCovidController(Context context)
+        // Singleton
+        private DadosCovidController(Context context) 
         {
             _context = context;
+         }
+
+        // The Singleton's instance is stored in a static field.
+        private static DadosCovidController _instance;
+
+        // This is the static method that controls the access to the singleton
+        // instance.
+        public static DadosCovidController GetInstance(Context context)
+        {
+            if (_instance == null)
+            {
+                _instance = new DadosCovidController(context);
+            }
+            return _instance;
         }
 
         // POST
-        public async Task<int> Cadastro(DadosCovid obj)
+        public int Cadastro(DadosCovid obj)
         {
             int codigo = 0;
             try
             {
                 _context.Add(obj);
-                codigo = await _context.SaveChangesAsync();
+                _registros++;
+                // Uso de cache de dados para depois fazer atualização no DB
+                if((_registros%_cache) == 0)
+                    codigo = _context.SaveChanges();
+            }
+            catch (SqliteException exSql)
+            {
+                throw new System.Exception(exSql.Message  + 
+                " - Code: " + exSql.SqliteErrorCode + 
+                " - Status: " + exSql.SqlState, exSql);
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message, ex);
+            }
+            
+            return codigo;
+        }
+
+        public int CadastroSimples(DadosCovid obj)
+        {
+            int codigo = 0;
+            try
+            {
+                _context.Add(obj);
+                codigo = _context.SaveChanges();
             }
             catch (SqliteException exSql)
             {
@@ -40,7 +82,7 @@ namespace CovidBrDataSetFileProcess.Controller
         }
 
         // GET
-        public async Task<DadosCovid> Get(int? id)
+        public DadosCovid Get(int? id)
         {
             if (id == null)
             {
@@ -50,7 +92,7 @@ namespace CovidBrDataSetFileProcess.Controller
             DadosCovid Dados;
             try
             {
-                Dados = await _context.OsDadosDoCovid.FindAsync(id);
+                Dados = _context.OsDadosDoCovid.Find(id);
             }
             catch (SqliteException exSql)
             {
@@ -71,7 +113,14 @@ namespace CovidBrDataSetFileProcess.Controller
             return Dados;
         }
 
-        public async Task<DadosCovid> Pesquisa(DadosCovid obj)
+        public DadosCovid Pesquisa(DadosCovid obj)
+        {
+            var Dados = PesquisaAsync(obj).Result;
+
+            return Dados;
+        }
+
+        public async Task<DadosCovid> PesquisaAsync(DadosCovid obj)
         {
             if (obj == null)
             {
@@ -114,7 +163,7 @@ namespace CovidBrDataSetFileProcess.Controller
         }
 
         // PUT
-        public async Task<DadosCovid> Update(int id, DadosCovid obj)
+        public DadosCovid Update(int id, DadosCovid obj)
         {
             if (id != obj.Id)
             {
@@ -124,7 +173,7 @@ namespace CovidBrDataSetFileProcess.Controller
             try
             {
                 _context.Update(obj);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (SqliteException exSql)
             {
@@ -136,11 +185,18 @@ namespace CovidBrDataSetFileProcess.Controller
             {
                 throw new System.Exception(ex.Message, ex);
             }
-            return await Get(id);
+            return Get(id);
+        }
+
+        public DadosCovid Delete(int? id)
+        {
+            var dados = DeleteAsync(id).Result;
+
+            return dados;
         }
 
         // DELETE
-        public async Task<DadosCovid> Delete(int? id)
+        public async Task<DadosCovid> DeleteAsync(int? id)
         {
             if (id == null)
             {
