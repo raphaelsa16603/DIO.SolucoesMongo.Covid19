@@ -86,6 +86,7 @@ namespace PostgreSQLCovidBrProcessFile.Business
                     int codigo = 0;
                     try
                     {
+                        // Conversão para metódos sincronos funcionou mais deixou super lento
                         DadosCovid DbObj = controller.Pesquisa(oDado);
                         if (DbObj == null)
                             codigo = controller.Cadastro(oDado);
