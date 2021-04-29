@@ -17,13 +17,13 @@ namespace PostgreSQLCovidBrProcessFile.Controller
         }
 
         // POST
-        public async Task<int> Cadastro(DadosCovid obj)
+        public int Cadastro(DadosCovid obj)
         {
             int codigo = 0;
             try
             {
                 _context.Add(obj);
-                codigo = await _context.SaveChangesAsync();
+                codigo = _context.SaveChanges();
             }
             catch (NpgsqlException exSql)
             {
@@ -52,7 +52,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
         }
 
         // GET
-        public async Task<DadosCovid> Get(int? id)
+        public DadosCovid Get(int? id)
         {
             if (id == null)
             {
@@ -62,7 +62,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             DadosCovid Dados;
             try
             {
-                Dados = await _context.OsDadosDoCovid.FindAsync(id);
+                Dados = _context.OsDadosDoCovid.Find(id);
             }
             catch (NpgsqlException exSql)
             {
@@ -83,7 +83,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             return Dados;
         }
 
-        public async Task<DadosCovid> Pesquisa(DadosCovid obj)
+        public DadosCovid Pesquisa(DadosCovid obj)
         {
             if (obj == null)
             {
@@ -100,7 +100,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             try
             {
                 //var query = from dados in _context.Set<DadosCovid>().Where;
-                Dados = await _context.OsDadosDoCovid.SingleAsync
+                Dados = _context.OsDadosDoCovid.Single
                 (b => b.city_ibge_code == obj.city_ibge_code.Trim() &&
                       b.date.CompareTo(obj.date) == 0);
             }
@@ -126,7 +126,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
         }
 
         // PUT
-        public async Task<DadosCovid> Update(int id, DadosCovid obj)
+        public DadosCovid Update(int id, DadosCovid obj)
         {
             if (id != obj.Id)
             {
@@ -136,7 +136,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             try
             {
                 _context.Update(obj);
-                await _context.SaveChangesAsync();
+                await _context.SaveChanges();
             }
             catch (NpgsqlException exSql)
             {
@@ -152,15 +152,15 @@ namespace PostgreSQLCovidBrProcessFile.Controller
         }
 
         // DELETE
-        public async Task<DadosCovid> Delete(int? id)
+        public DadosCovid Delete(int? id)
         {
             if (id == null)
             {
                 throw new System.Exception("Sem o Id do registro");
             }
 
-            var osDadosCovid = await _context.OsDadosDoCovid
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var osDadosCovid = _context.OsDadosDoCovid
+                .FirstOrDefault(m => m.Id == id);
             if (osDadosCovid == null)
             {
                 throw new System.Exception("Registro não localizado");
@@ -169,7 +169,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             try
             {
                 _context.OsDadosDoCovid.Remove(osDadosCovid);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (NpgsqlException exSql)
             {
