@@ -45,7 +45,7 @@ namespace PostgreSQLCovidBrProcessFile.Business
             
             fileCsvLimpo = System.IO.Path.Combine(diretorioDataSetLimpo, FileNameLimpo);
 
-            controller = new DadosCovidController(new Context());
+            controller = DadosCovidController.GetInstance(new Context());
         }
         
         public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
@@ -89,7 +89,10 @@ namespace PostgreSQLCovidBrProcessFile.Business
                         // Conversão para metódos sincronos funcionou mais deixou super lento
                         DadosCovid DbObj = controller.Pesquisa(oDado);
                         if (DbObj == null)
-                            codigo = controller.Cadastro(oDado);
+                            if(contador < totallinhas)
+                                codigo = controller.Cadastro(oDado);
+                            else
+                                codigo = controller.CadastroSimples(oDado);
                     }
                     catch (System.Exception ex)
                     {

@@ -10,14 +10,73 @@ namespace PostgreSQLCovidBrProcessFile.Controller
     public class DadosCovidController
     {
         private readonly Context _context;
+        private int _registros;
+        private readonly int _cache = 5000;
 
-        public DadosCovidController(Context context)
+        // public DadosCovidController(Context context)
+        // {
+        //     _context = context;
+        // }
+
+        // Singleton
+        private DadosCovidController(Context context) 
         {
             _context = context;
+         }
+
+        // The Singleton's instance is stored in a static field.
+        private static DadosCovidController _instance;
+
+        // This is the static method that controls the access to the singleton
+        // instance.
+        public static DadosCovidController GetInstance(Context context)
+        {
+            if (_instance == null)
+            {
+                _instance = new DadosCovidController(context);
+            }
+            return _instance;
         }
 
         // POST
         public int Cadastro(DadosCovid obj)
+        {
+            int codigo = 0;
+            try
+            {
+                _context.Add(obj);
+                _registros++;
+                // Uso de cache de dados para depois fazer atualização no DB
+                if((_registros%_cache) == 0)
+                    codigo = _context.SaveChanges();
+            }
+            catch (NpgsqlException exSql)
+            {
+                try
+                {
+                    // Sincrono...
+                    codigo = _context.SaveChanges();    
+                }
+                catch (NpgsqlException exSql2)
+                {
+                    throw new System.Exception(exSql2.Message  + 
+                    " - Code: " + exSql2.ErrorCode + 
+                    " - Status: " + exSql2.SqlState, exSql);
+                }
+                catch (System.Exception ex)
+                {
+                    throw new System.Exception(ex.Message, exSql);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message, ex);
+            }
+            
+            return codigo;
+        }
+
+        public int CadastroSimples(DadosCovid obj)
         {
             int codigo = 0;
             try
