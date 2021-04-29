@@ -109,9 +109,9 @@ namespace PostgreSQLCovidBrProcessFile
             */
 
             
-            System.Console.WriteLine("----------------------------------------------------");
-            System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
-            System.Console.WriteLine("----------------------------------------------------");
+            System.Console.WriteLine("------------------------------------------------------");
+            System.Console.WriteLine("Atualizando Banco de Dados PostgreSQL com novos dados");
+            System.Console.WriteLine("------------------------------------------------------");
             // Processando os arquivos csv e colocando no Banco de Dados SQLite
             foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
             {

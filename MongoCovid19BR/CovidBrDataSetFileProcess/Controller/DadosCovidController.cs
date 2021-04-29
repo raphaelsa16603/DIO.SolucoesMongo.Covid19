@@ -11,7 +11,8 @@ namespace CovidBrDataSetFileProcess.Controller
     {
         private readonly Context _context;
         private int _registros;
-        private readonly int _cache = 2000;
+        // Extranho qualquer volor diferente de 1000, não é realizado o SaveChanges!!
+        private readonly int _cache = 1000;
 
         // Singleton
         private DadosCovidController(Context context) 
