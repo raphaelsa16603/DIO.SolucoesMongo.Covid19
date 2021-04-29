@@ -11,7 +11,7 @@ namespace PostgreSQLCovidBrProcessFile.Controller
     {
         private readonly Context _context;
         private int _registros;
-        private readonly int _cache = 5000;
+        private readonly int _cache = 2000;
 
         // public DadosCovidController(Context context)
         // {
