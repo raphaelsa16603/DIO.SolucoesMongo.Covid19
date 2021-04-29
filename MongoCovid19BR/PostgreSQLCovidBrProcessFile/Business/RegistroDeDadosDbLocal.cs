@@ -48,7 +48,7 @@ namespace PostgreSQLCovidBrProcessFile.Business
             controller = new DadosCovidController(new Context());
         }
         
-        public async void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
+        public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
         {
             DadosCovid oDado = null;
             if(contador > 1)
@@ -86,9 +86,9 @@ namespace PostgreSQLCovidBrProcessFile.Business
                     int codigo = 0;
                     try
                     {
-                        DadosCovid DbObj = await controller.Pesquisa(oDado);
+                        DadosCovid DbObj = controller.Pesquisa(oDado);
                         if (DbObj == null)
-                            codigo = await controller.Cadastro(oDado);
+                            codigo = controller.Cadastro(oDado);
                     }
                     catch (System.Exception ex)
                     {
