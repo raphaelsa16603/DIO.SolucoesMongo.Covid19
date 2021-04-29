@@ -17,10 +17,10 @@ namespace PostgreSQLCovidBrProcessFile.Model
         {
             //optionsBuilder.UseSqlite("Data Source=DadosCovid19BR.db");
             optionsBuilder
-            .EnableSensitiveDataLogging()
+            //.EnableSensitiveDataLogging()
             .UseNpgsql(
-               "Host=raphaelsa-desktop-n3.local;Port=5432;Pooling=true;Database=Covid19Br;User Id=appCovid19Br;Password=covid19Br;",
-               providerOptions => { providerOptions.EnableRetryOnFailure(); });
+               "Host=raphaelsa-desktop-n3.local;Port=5432;Pooling=true;Database=Covid19Br;User Id=appCovid19Br;Password=covid19Br;");
+               //,providerOptions => { providerOptions.EnableRetryOnFailure(); });
                
         }
 
