@@ -3,10 +3,10 @@ using System.Net;
 using System.Text;
 using System.Configuration;
 using System.Threading.Tasks;
-using PostgreSQLCovidBrProcessFile.Lib.ProgressBar;
+using DownloadFile.Lib.ProgressBar;
 using System.IO;
 
-namespace PostgreSQLCovidBrProcessFile.Lib.DownLoadFile
+namespace DownloadFile.Lib.DownLoadFile
 {
     public class DownLoadFile
     {

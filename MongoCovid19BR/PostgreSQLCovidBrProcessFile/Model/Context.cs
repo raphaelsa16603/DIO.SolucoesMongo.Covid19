@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PostgreSQLCovidBrProcessFile.Model;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PostgreSQLCovidBrProcessFile.Model
 {
@@ -15,8 +16,11 @@ namespace PostgreSQLCovidBrProcessFile.Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlite("Data Source=DadosCovid19BR.db");
-            optionsBuilder.UseNpgsql(
-               "Host=raphaelsa-desktop-n3.local;Port=5432;Pooling=true;Database=Covid19Br;User Id=appCovid19Br;Password=covid19Br;");
+            optionsBuilder
+            .EnableSensitiveDataLogging()
+            .UseNpgsql(
+               "Host=raphaelsa-desktop-n3.local;Port=5432;Pooling=true;Database=Covid19Br;User Id=appCovid19Br;Password=covid19Br;",
+               providerOptions => { providerOptions.EnableRetryOnFailure(); });
                
         }
 
