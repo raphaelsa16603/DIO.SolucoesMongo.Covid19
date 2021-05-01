@@ -8,7 +8,7 @@ using LibToolsLog;
 
 namespace IncrementalFileProcessPostgreSql.Business
 {
-    public class RegistroDeDadosDbLocal
+    public class RegistroDeDadosDbLocal : IDisposable
     {
         ToolsProgressBar tools = new ToolsProgressBar();
         string fileErroCsv = "";
@@ -419,5 +419,9 @@ namespace IncrementalFileProcessPostgreSql.Business
             }
         }
 
+        public void Dispose()
+        {
+            this.controller.Dispose();
+        }
     }
 }
