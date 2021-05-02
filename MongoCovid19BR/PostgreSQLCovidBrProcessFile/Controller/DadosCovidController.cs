@@ -7,7 +7,7 @@ using Npgsql;
 
 namespace PostgreSQLCovidBrProcessFile.Controller
 {
-    public class DadosCovidController
+    public class DadosCovidController : IDisposable
     {
         private readonly Context _context;
         private int _registros;
@@ -265,6 +265,26 @@ namespace PostgreSQLCovidBrProcessFile.Controller
             }
 
             return osDadosCovid;
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (NpgsqlException exSql)
+            {
+                throw new System.Exception(exSql.Message  + 
+                " - Code: " + exSql.ErrorCode + 
+                " - Status: " + exSql.SqlState, exSql);
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message, ex);
+            }
+
+            _context.Dispose();
         }
     }
 }

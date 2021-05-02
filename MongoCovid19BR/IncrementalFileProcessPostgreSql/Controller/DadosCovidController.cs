@@ -284,6 +284,7 @@ namespace IncrementalFileProcessPostgreSql.Controller
             {
                 throw new System.Exception(ex.Message, ex);
             }
+            _context.Dispose();
         }
     }
 }

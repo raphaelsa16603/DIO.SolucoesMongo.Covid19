@@ -8,7 +8,7 @@ using PostgreSQLCovidBrProcessFile.Lib.ToolsLogs;
 
 namespace PostgreSQLCovidBrProcessFile.Business
 {
-    public class RegistroDeDadosDbLocal
+    public class RegistroDeDadosDbLocal : IDisposable
     {
         ToolsProgressBar tools = new ToolsProgressBar();
         string fileErroCsv = "";
@@ -399,5 +399,9 @@ namespace PostgreSQLCovidBrProcessFile.Business
             }
         }
 
+        public void Dispose()
+        {
+            this.controller.Dispose();
+        }
     }
 }
