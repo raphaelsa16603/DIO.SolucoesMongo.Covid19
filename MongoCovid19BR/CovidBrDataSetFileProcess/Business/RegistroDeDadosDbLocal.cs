@@ -8,7 +8,7 @@ using CovidBrDataSetFileProcess.Lib.ToolsLogs;
 
 namespace CovidBrDataSetFileProcess.Business
 {
-    public class RegistroDeDadosDbLocal
+    public class RegistroDeDadosDbLocal : IDisposable
     {
         ToolsProgressBar tools = new ToolsProgressBar();
         string fileErroCsv = "";
@@ -398,5 +398,9 @@ namespace CovidBrDataSetFileProcess.Business
             }
         }
 
+        public void Dispose()
+        {
+            this.controller.Dispose();
+        }
     }
 }

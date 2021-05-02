@@ -95,7 +95,7 @@ namespace CovidBrDataSetFileProcess
             // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
-            var ForDb = new RegistroDeDadosDbLocal();
+            // var ForDb = new RegistroDeDadosDbLocal();
 
             /* --- Limpar o arquivo CSV para importar pelo MongoDB Compass não funciona
             // --- Importação limitada a 8.000 registros ....
@@ -110,16 +110,18 @@ namespace CovidBrDataSetFileProcess
             System.Console.WriteLine("\n");
             */
 
-            
-            System.Console.WriteLine("----------------------------------------------------");
-            System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
-            System.Console.WriteLine("----------------------------------------------------");
-            // Processando os arquivos csv e colocando no Banco de Dados SQLite
-            foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+            using(var ForDb = new RegistroDeDadosDbLocal())
             {
-                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
+                System.Console.WriteLine("----------------------------------------------------");
+                System.Console.WriteLine("Atualizando Banco de Dados SQLite com novos dados");
+                System.Console.WriteLine("----------------------------------------------------");
+                // Processando os arquivos csv e colocando no Banco de Dados SQLite
+                foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+                {
+                    ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
+                }
+                System.Console.WriteLine("\n");
             }
-            System.Console.WriteLine("\n");
             
 
 

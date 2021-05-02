@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CovidBrDataSetFileProcess.Controller
 {
-    public class DadosCovidController
+    public class DadosCovidController : IDisposable
     {
         private readonly Context _context;
         private int _registros;
@@ -228,6 +228,26 @@ namespace CovidBrDataSetFileProcess.Controller
             }
 
             return osDadosCovid;
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (SqliteException exSql)
+            {
+                throw new System.Exception(exSql.Message  + 
+                " - Code: " + exSql.SqliteErrorCode + 
+                " - Status: " + exSql.SqlState, exSql);
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message, ex);
+            }
+
+            _context.Dispose();
         }
     }
 }
