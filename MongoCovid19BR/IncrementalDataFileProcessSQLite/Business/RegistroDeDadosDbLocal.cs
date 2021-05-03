@@ -1,12 +1,12 @@
 using System;
 using System.Configuration;
 using System.IO;
-using IncrementalDataFileProcessPostgreSql.Controller;
+using IncrementalDataFileProcessSQLite.Controller;
+using IncrementalDataFileProcessSQLite.Model;
 using LibConsoleProgressBar;
-using IncrementalDataFileProcessPostgreSql.Model;
 using LibToolsLog;
 
-namespace IncrementalDataFileProcessPostgreSql.Business
+namespace IncrementalDataFileProcessSQLite.Business
 {
     public class RegistroDeDadosDbLocal : IDisposable
     {
@@ -14,7 +14,6 @@ namespace IncrementalDataFileProcessPostgreSql.Business
         string fileErroCsv = "";
         string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
-
         string _DataFilter = "2021-01-13";
 
         DadosCovidController controller;
@@ -65,7 +64,7 @@ namespace IncrementalDataFileProcessPostgreSql.Business
             
             fileCsvLimpo = System.IO.Path.Combine(diretorioDataSetLimpo, FileNameLimpo);
 
-            controller = DadosCovidController.GetInstance(new Model.Context());
+            controller = DadosCovidController.GetInstance(new Context());
         }
         
         public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
