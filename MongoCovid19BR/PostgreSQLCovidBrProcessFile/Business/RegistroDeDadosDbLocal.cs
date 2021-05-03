@@ -1,10 +1,10 @@
 using System;
 using System.Configuration;
 using System.IO;
+using LibConsoleProgressBar;
+using LibToolsLog;
 using PostgreSQLCovidBrProcessFile.Controller;
-using PostgreSQLCovidBrProcessFile.Lib.ProgressBar;
 using PostgreSQLCovidBrProcessFile.Model;
-using PostgreSQLCovidBrProcessFile.Lib.ToolsLogs;
 
 namespace PostgreSQLCovidBrProcessFile.Business
 {

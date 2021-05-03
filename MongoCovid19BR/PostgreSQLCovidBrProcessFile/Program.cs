@@ -2,11 +2,11 @@
 using System.Configuration;
 using System.IO;
 using System.Threading;
+using LibConsoleProgressBar;
+using LibFileDownload;
+using LibFileTools;
+using LibWeb;
 using PostgreSQLCovidBrProcessFile.Business;
-using PostgreSQLCovidBrProcessFile.Lib.DownLoadFile;
-using PostgreSQLCovidBrProcessFile.Lib.FileTools;
-using PostgreSQLCovidBrProcessFile.Lib.ProgressBar;
-using PostgreSQLCovidBrProcessFile.Lib.Web;
 
 namespace PostgreSQLCovidBrProcessFile
 {
@@ -14,22 +14,34 @@ namespace PostgreSQLCovidBrProcessFile
     {
         static void Main(string[] args)
         {
-            // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
-            // e pegar a data do arquivo -- Classe Ler dados da página!
-            string Data = LoadInfoUrl.GetDataUrlCovid19BrFiles();
-            System.Console.WriteLine($"Data do arquivo {Data}");
-            
-            // TODO: -- Classe para fazer barra de progresso na tela do console
-            TesteDoProgressBar();
-
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataSet))
                 System.IO.Directory.CreateDirectory(diretorioDataSet);
             string arquivoDB = ConfigurationManager.AppSettings["file"];
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
-
             DirectoryInfo directoryData = new DirectoryInfo(diretorioDataSet);
+
+            // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
+            // e pegar a data do arquivo -- Classe Ler dados da página!
+            string Data = "";
+            try
+            {
+                Data = LoadInfoUrl.GetDataUrlCovid19BrFiles("","");
+            }
+            catch (System.Exception)
+            {
+                bool existeArquivoCsv = directoryData.GetFiles("*.csv").Length > 0;
+                foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
+                {
+                    Data = fileToCsv.Name.Replace("/","-").Replace(" - caso_full.csv", "").Trim();
+                }
+            }
+            System.Console.WriteLine($"Data do arquivo {Data}");
+            
+            // TODO: -- Classe para fazer barra de progresso na tela do console
+            TesteDoProgressBar();
+
             bool existeArquivoCsvDoDia = false;
             foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
             {

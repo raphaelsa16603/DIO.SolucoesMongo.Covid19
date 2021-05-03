@@ -2,9 +2,9 @@ using System;
 using System.Configuration;
 using System.IO;
 using CovidBrDataSetFileProcess.Controller;
-using CovidBrDataSetFileProcess.Lib.ProgressBar;
 using CovidBrDataSetFileProcess.Model;
-using CovidBrDataSetFileProcess.Lib.ToolsLogs;
+using LibConsoleProgressBar;
+using LibToolsLog;
 
 namespace CovidBrDataSetFileProcess.Business
 {
