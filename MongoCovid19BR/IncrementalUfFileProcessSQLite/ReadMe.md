@@ -1,7 +1,7 @@
 # Projeto DadosCovi19BRTools
 ## Ferramenta para ler o arquivo (caso_full.csv.gz) de https://brasil.io/dataset/covid19/files/ 
 ## Descompactar o CSV, ler o CSV e Registrar em um banco de dodos SQLite local
-## Atualizar base de dados de forma incremental por Data
+## Atualizar base de dados de forma incremental por UF
 ### - Raphael Simões Andrade
 
 

@@ -1,0 +1,3 @@
+SELECT * 
+FROM OsDadosDoCovid
+ORDER BY "Id" DESC LIMIT 100
