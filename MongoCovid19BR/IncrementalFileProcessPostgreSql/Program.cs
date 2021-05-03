@@ -14,22 +14,37 @@ namespace IncrementalFileProcessPostgreSql
     {
         static void Main(string[] args)
         {
-            // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
-            // e pegar a data do arquivo -- Classe Ler dados da página!
-            string Data = LoadInfoUrl.GetDataUrlCovid19BrFiles("","");
-            System.Console.WriteLine($"Data do arquivo {Data}");
-            
-            // TODO: -- Classe para fazer barra de progresso na tela do console
-            TesteDoProgressBar();
-
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataSet))
                 System.IO.Directory.CreateDirectory(diretorioDataSet);
             string arquivoDB = ConfigurationManager.AppSettings["file"];
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
-
             DirectoryInfo directoryData = new DirectoryInfo(diretorioDataSet);
+
+            // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
+            // e pegar a data do arquivo -- Classe Ler dados da página!
+            string Data = "";
+            try
+            {
+                Data = LoadInfoUrl.GetDataUrlCovid19BrFiles("","");
+            }
+            catch (System.Exception)
+            {
+                bool existeArquivoCsv = directoryData.GetFiles("*.csv").Length > 0;
+                foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
+                {
+                    Data = fileToCsv.Name.Replace("/","-").Replace(" - caso_full.csv", "").Trim();
+                }
+            }
+            System.Console.WriteLine($"Data do arquivo {Data}");
+            
+            // TODO: -- Classe para fazer barra de progresso na tela do console
+            TesteDoProgressBar();
+
+            
+
+            
             bool existeArquivoCsvDoDia = false;
             foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
             {
@@ -110,8 +125,11 @@ namespace IncrementalFileProcessPostgreSql
 
             using (var ForDb = new RegistroDeDadosDbLocal(""))
             {
+                string uf = ConfigurationManager.AppSettings["incrementalUF"];
                 System.Console.WriteLine("------------------------------------------------------");
                 System.Console.WriteLine("Atualizando Banco de Dados PostgreSQL com novos dados");
+                System.Console.WriteLine("------------------------------------------------------");
+                System.Console.WriteLine($"---   Filtro:              UF == {uf}          -------");
                 System.Console.WriteLine("------------------------------------------------------");
                 // Processando os arquivos csv e colocando no Banco de Dados SQLite
                 foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
