@@ -147,7 +147,9 @@ namespace IncrementalDataFileProcessPostgreSql
             
 
 
-            // TODO: Precessar o arquivo CSV e enviar para a API Rest com MongoDB
+            //Atualiza arquivo de configuração 
+            var novaDataConfig = DateTime.Parse(Data).AddDays(-2);
+            AddUpdateAppSettings("incrementalData", novaDataConfig.ToString("yyyy-MM-dd"));
         }
 
         static void TesteDoProgressBar() {
@@ -160,5 +162,29 @@ namespace IncrementalDataFileProcessPostgreSql
             }
             Console.WriteLine("Done.");
 	    }
+
+
+        private static void AddUpdateAppSettings(string key, string value)  
+        {  
+            try  
+            {  
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);  
+                var settings = configFile.AppSettings.Settings;  
+                if (settings[key] == null)  
+                {  
+                    settings.Add(key, value);  
+                }  
+                else  
+                {  
+                    settings[key].Value = value;  
+                }  
+                configFile.Save(ConfigurationSaveMode.Modified);  
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);  
+            }  
+            catch (ConfigurationErrorsException)  
+            {  
+                Console.WriteLine("Error writing app settings");  
+            }  
+        } 
     }
 }
