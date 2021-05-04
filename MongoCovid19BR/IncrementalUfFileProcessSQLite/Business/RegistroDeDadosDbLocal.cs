@@ -26,7 +26,6 @@ namespace IncrementalUfFileProcessSQLite.Business
                 try
                 {
                     Uf = ConfigurationManager.AppSettings["incrementalUF"];
-                    var teste = DateTime.Parse(Uf);
                 }
                 catch (System.Exception)
                 {
