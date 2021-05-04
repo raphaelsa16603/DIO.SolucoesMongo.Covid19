@@ -122,7 +122,16 @@ namespace IncrementalDataFileProcessPostgreSql
 
             using ( var ForDb = new RegistroDeDadosDbLocal("") )
             {
-                string data = ConfigurationManager.AppSettings["incrementalData"];
+                string data = "";
+                try
+                {
+                    data = ConfigurationManager.AppSettings["incrementalData"];
+                    var teste = DateTime.Parse(data);
+                }
+                catch (System.Exception)
+                {
+                    data = "2021-01-13";
+                }
                 System.Console.WriteLine("------------------------------------------------------");
                 System.Console.WriteLine("Atualizando Banco de Dados PostgreSQL com novos dados");
                 System.Console.WriteLine("------------------------------------------------------");
