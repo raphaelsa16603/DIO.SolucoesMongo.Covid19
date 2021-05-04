@@ -85,6 +85,11 @@ namespace IncrementalDataFileProcessPostgreSql
                     fileToCsv.MoveTo(NovoNomeArquivo);
                 }
             }
+
+            // Atualiza arquivo de configuração 
+            // Funciona localmente na aplicação, mas aparentemente não altera o arquivo App.config
+            // var novaDataConfigTeste = DateTime.Parse(Data);
+            // AddUpdateAppSettings("incrementalData", novaDataConfigTeste.ToString("yyyy-MM-dd"));
             
             // --- Registrar os dados do CSV no banco de dados SQLite é muito lento
             // --- Solução é enviar os dados diretamente para a API RestFull
