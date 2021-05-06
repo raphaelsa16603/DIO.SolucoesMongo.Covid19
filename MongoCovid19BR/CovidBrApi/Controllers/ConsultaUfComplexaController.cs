@@ -20,7 +20,7 @@ namespace CovidBrApi.Controllers
         {
             _mongoDB = mongoDB;
             _dadosCovidCollection = _mongoDB.DB.GetCollection<DadosCovid>
-                                       (typeof(DadosCovid).Name.ToLower());
+                                       (typeof(DadosCovid).Name.Trim());//.Name.ToLower());
         }
 
 
