@@ -5,4 +5,17 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.12.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LibConsoleProgressBar\LibConsoleProgressBar.csproj" />
+    <ProjectReference Include="..\LibFileDownload\LibFileDownload.csproj" />
+    <ProjectReference Include="..\LibFileTools\LibFileTools.csproj" />
+    <ProjectReference Include="..\LibToolsLog\LibToolsLog.csproj" />
+    <ProjectReference Include="..\LibWeb\LibWeb.csproj" />
+  </ItemGroup>
+
 </Project>

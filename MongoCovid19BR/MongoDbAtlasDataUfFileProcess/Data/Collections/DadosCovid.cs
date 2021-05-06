@@ -2,7 +2,7 @@ using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CovidBrProcessFileToMongoDb.Data.Collections
+namespace MongoDbAtlasDataUfFileProcess.Data.Collections
 {
     public class DadosCovid
     {

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CovidBrProcessFileToMongoDb.Model;
-using CovidBrProcessFileToMongoDb.Models;
+using MongoDbAtlasDataUfFileProcess.Model;
+using MongoDbAtlasDataUfFileProcess.Models;
 using LibToolsLog;
 using MongoDB.Driver;
 
-namespace CovidBrProcessFileToMongoDb.Controller
+namespace MongoDbAtlasDataUfFileProcess.Controller
 {
     public class DadosCovidController : IDisposable
     {

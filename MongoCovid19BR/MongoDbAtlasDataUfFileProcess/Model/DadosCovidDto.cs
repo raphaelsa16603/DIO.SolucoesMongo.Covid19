@@ -1,6 +1,6 @@
 using System;
 
-namespace CovidBrProcessFileToMongoDb.Models
+namespace MongoDbAtlasDataUfFileProcess.Models
 {
     public class DadosCovidDto
     {

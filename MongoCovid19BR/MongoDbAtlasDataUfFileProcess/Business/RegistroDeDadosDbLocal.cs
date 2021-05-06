@@ -1,12 +1,12 @@
 using System;
 using System.Configuration;
 using System.IO;
-using CovidBrProcessFileToMongoDb.Controller;
-using CovidBrProcessFileToMongoDb.Model;
+using MongoDbAtlasDataUfFileProcess.Controller;
+using MongoDbAtlasDataUfFileProcess.Model;
 using LibConsoleProgressBar;
 using LibToolsLog;
 
-namespace CovidBrProcessFileToMongoDb.Business
+namespace MongoDbAtlasDataUfFileProcess.Business
 {
     public class RegistroDeDadosDbLocal : IDisposable
     {
@@ -15,10 +15,47 @@ namespace CovidBrProcessFileToMongoDb.Business
         string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
 
+        string _ufFilter = "PB";
+        string _DataFilter = "2021-01-13";
+
         DadosCovidController controller;
 
-        public RegistroDeDadosDbLocal(Data.MongoDB mongoDB)
+        public RegistroDeDadosDbLocal(Data.MongoDB mongoDB, string incrementalUF, string incrementalData)
         {
+            if(incrementalUF.Trim().Equals(""))
+            {
+                string uf = "PB";
+                try
+                {
+                    uf = ConfigurationManager.AppSettings["incrementalUF"];
+                }
+                catch (System.Exception)
+                {
+                    uf = "PB";
+                }
+                if (!uf.Trim().Equals(""))
+                {
+                    _ufFilter = uf;
+                }
+            }
+            if(incrementalData.Trim().Equals(""))
+            {
+                string data = "";
+                try
+                {
+                    data = ConfigurationManager.AppSettings["incrementalData"];
+                    var teste = DateTime.Parse(data);
+                }
+                catch (System.Exception)
+                {
+                    data = "2021-01-13";
+                }
+                
+                if (!data.Trim().Equals(""))
+                {
+                    _DataFilter = data;
+                }
+            }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataErro))
@@ -84,16 +121,33 @@ namespace CovidBrProcessFileToMongoDb.Business
                 if(oDado != null)
                 {
                     int codigo = 0;
-                    try
+                    if(oDado.state != null)
                     {
-                        DadosCovid DbObj = controller.Pesquisa(oDado);
-                        if (DbObj == null)
-                            codigo = controller.Cadastro(oDado);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        // Se der erro é para registrar em arquivo de log
-                        LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                        if(oDado.state.Trim().ToUpper().Equals(_ufFilter.Trim().ToUpper()))
+                        {
+                            if(oDado.date >= DateTime.Parse(_DataFilter))
+                            {
+                                try
+                                {
+                                    DadosCovid DbObj = controller.Pesquisa(oDado);
+                                    if (DbObj == null)
+                                        codigo = controller.Cadastro(oDado);
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    // Se der erro é para registrar em arquivo de log
+                                    LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                                }
+                            }
+                            else
+                            {
+                                // Registro dispensado 2
+                            }
+                        }
+                        else
+                        {
+                            // Registro dispensado
+                        }
                     }
                 }
 

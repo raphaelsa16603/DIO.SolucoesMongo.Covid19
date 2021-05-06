@@ -1,11 +1,11 @@
 using System;
-using CovidBrProcessFileToMongoDb.Data.Collections;
+using MongoDbAtlasDataUfFileProcess.Data.Collections;
 using System.Configuration;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
-namespace CovidBrProcessFileToMongoDb.Data
+namespace MongoDbAtlasDataUfFileProcess.Data
 {
     public class MongoDB
     {
