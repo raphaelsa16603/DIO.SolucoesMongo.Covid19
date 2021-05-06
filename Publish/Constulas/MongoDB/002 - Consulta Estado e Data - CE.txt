@@ -1,0 +1,1 @@
+{ "state": {$eq: 'CE'}, "date": {$gt: new Date('2020-05-05')} }
