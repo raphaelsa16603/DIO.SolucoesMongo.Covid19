@@ -170,7 +170,19 @@ namespace CovidBrProcessFileToMongoDb.Controller
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
                 
                 var DadosList = oDadosCovid.ToList();
-                Dados = DadosList[0];
+                if(DadosList == null)
+                {
+                    Dados = null;
+                } 
+                else if (DadosList.Count == 0)
+                {
+                    Dados = null;
+                } 
+                else if (DadosList.Count > 0)
+                {
+                    Dados = DadosList[0];
+                }
+
             
                 return Dados;
             }
