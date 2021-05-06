@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CovidBrProcessFileToMongoDb.Lib.ToolsLogs;
 using CovidBrProcessFileToMongoDb.Model;
 using CovidBrProcessFileToMongoDb.Models;
+using LibToolsLog;
 using MongoDB.Driver;
 
 namespace CovidBrProcessFileToMongoDb.Controller
 {
-    public class DadosCovidController
+    public class DadosCovidController : IDisposable
     {
         Data.MongoDB _mongoDB;
         IMongoCollection<DadosCovid> _dadosCovidCollection;
@@ -21,7 +21,7 @@ namespace CovidBrProcessFileToMongoDb.Controller
         }
 
         // POST
-        public async Task<int> Cadastro(DadosCovid dto)
+        public int Cadastro(DadosCovid dto)
         {
             int codigo = 0;
             var dados = new DadosCovid(
@@ -47,7 +47,8 @@ namespace CovidBrProcessFileToMongoDb.Controller
                 );
             try
             {
-                await _dadosCovidCollection.InsertOneAsync(dados);
+                //await _dadosCovidCollection.InsertOneAsync(dados);
+                _dadosCovidCollection.InsertOne(dados);
                 codigo = 0;
                 return codigo;
             }
@@ -60,7 +61,17 @@ namespace CovidBrProcessFileToMongoDb.Controller
             
         }
 
-        public async Task<List<DadosCovid>> ObterDadosCovid(string city_ibge_code)
+        public List<DadosCovid> ObterDadosCovid(string city_ibge_code)
+        {
+            // PesquisaCaller caller = new PesquisaCaller(PesquisaAsync);
+            // IAsyncResult result = caller.BeginInvoke(obj, null, null);
+            // var Dados = caller.EndInvoke(result);
+            var Dados = ObterDadosCovidAsync(city_ibge_code).Result;
+
+            return Dados;
+        }
+
+        public async Task<List<DadosCovid>> ObterDadosCovidAsync(string city_ibge_code)
         {
             var filter = Builders<DadosCovid>.Filter.Eq
                     (inf => inf.city_ibge_code, city_ibge_code);
@@ -79,8 +90,18 @@ namespace CovidBrProcessFileToMongoDb.Controller
             }
         }
 
+        public DadosCovid Get(string uId)
+        {
+            // PesquisaCaller caller = new PesquisaCaller(PesquisaAsync);
+            // IAsyncResult result = caller.BeginInvoke(obj, null, null);
+            // var Dados = caller.EndInvoke(result);
+            var Dados = GetAsync(uId).Result;
+
+            return Dados;
+        }
+
         // GET
-        public async Task<DadosCovid> Get(string uId)
+        public async Task<DadosCovid> GetAsync(string uId)
         {
             if (uId == null)
             {
@@ -103,7 +124,17 @@ namespace CovidBrProcessFileToMongoDb.Controller
             }
         }
 
-        public async Task<DadosCovid> Pesquisa(DadosCovid obj)
+        public DadosCovid Pesquisa(DadosCovid obj)
+        {
+            // PesquisaCaller caller = new PesquisaCaller(PesquisaAsync);
+            // IAsyncResult result = caller.BeginInvoke(obj, null, null);
+            // var Dados = caller.EndInvoke(result);
+            var Dados = PesquisaAsync(obj).Result;
+
+            return Dados;
+        }
+
+        public async Task<DadosCovid> PesquisaAsync(DadosCovid obj)
         {
             if (obj == null)
             {
@@ -152,7 +183,8 @@ namespace CovidBrProcessFileToMongoDb.Controller
         }
 
         // PUT
-        public async Task<DadosCovid> Update(DadosCovid dto)
+        //public async Task<DadosCovid> Update(DadosCovid dto)
+        public DadosCovid Update(DadosCovid dto)
         {
             if (dto == null)
             {
@@ -256,7 +288,9 @@ namespace CovidBrProcessFileToMongoDb.Controller
             {
                 if(update != null)
                 {
-                    var result = await  _dadosCovidCollection.UpdateOneAsync
+                    // var result = await  _dadosCovidCollection.UpdateOneAsync
+                    //                             (complexFilter, update);
+                    var result =  _dadosCovidCollection.UpdateOne
                                                 (complexFilter, update);
                 }
                 
@@ -266,18 +300,25 @@ namespace CovidBrProcessFileToMongoDb.Controller
                 LogTools.LogErroToFile
                     ($" Erro na Atualização dos dados do Objeto {ex.Message}", ex.StackTrace);
             }
-            return await Get(dto.uId);
+            return Get(dto.uId);
+        }
+
+        public DadosCovid DeleteByUid(string uId)
+        {
+            var dados = DeleteByUidAsync(uId).Result;
+
+            return dados;
         }
 
         // DELETE
-        public async Task<DadosCovid> DeleteByUid(string uId)
+        public async Task<DadosCovid> DeleteByUidAsync(string uId)
         {
             if (uId == null)
             {
                 throw new System.Exception("Sem o Id do registro");
             }
 
-            DadosCovid dados = await Get(uId);
+            DadosCovid dados = await GetAsync(uId);
 
             var filter1 = Builders<DadosCovid>.Filter.Eq
                     (inf => inf.uId, uId);
@@ -295,7 +336,14 @@ namespace CovidBrProcessFileToMongoDb.Controller
             return dados;
         }
 
-        public async Task<DadosCovid> Delete(DadosCovid dto)
+        public DadosCovid Delete(DadosCovid dto)
+        {
+            var dados = DeleteAsync(dto).Result;
+
+            return dados;
+        }
+
+        public async Task<DadosCovid> DeleteAsync(DadosCovid dto)
         {
             if (dto == null)
             {
@@ -323,6 +371,11 @@ namespace CovidBrProcessFileToMongoDb.Controller
             }
 
             return dto;
+        }
+
+        public void Dispose()
+        {
+            // Não existe Dispose para o MongoDB!
         }
     }
 }

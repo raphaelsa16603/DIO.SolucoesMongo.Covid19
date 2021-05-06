@@ -2,13 +2,13 @@ using System;
 using System.Configuration;
 using System.IO;
 using CovidBrProcessFileToMongoDb.Controller;
-using CovidBrProcessFileToMongoDb.Lib.ProgressBar;
 using CovidBrProcessFileToMongoDb.Model;
-using CovidBrProcessFileToMongoDb.Lib.ToolsLogs;
+using LibConsoleProgressBar;
+using LibToolsLog;
 
 namespace CovidBrProcessFileToMongoDb.Business
 {
-    public class RegistroDeDadosDbLocal
+    public class RegistroDeDadosDbLocal : IDisposable
     {
         ToolsProgressBar tools = new ToolsProgressBar();
         string fileErroCsv = "";
@@ -48,7 +48,7 @@ namespace CovidBrProcessFileToMongoDb.Business
             controller = new DadosCovidController(mongoDB);
         }
         
-        public async void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
+        public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
         {
             DadosCovid oDado = null;
             if(contador > 1)
@@ -86,9 +86,9 @@ namespace CovidBrProcessFileToMongoDb.Business
                     int codigo = 0;
                     try
                     {
-                        DadosCovid DbObj = await controller.Pesquisa(oDado);
+                        DadosCovid DbObj = controller.Pesquisa(oDado);
                         if (DbObj == null)
-                            codigo = await controller.Cadastro(oDado);
+                            codigo = controller.Cadastro(oDado);
                     }
                     catch (System.Exception ex)
                     {
@@ -395,5 +395,9 @@ namespace CovidBrProcessFileToMongoDb.Business
             }
         }
 
+        public void Dispose()
+        {
+            controller.Dispose();
+        }
     }
 }

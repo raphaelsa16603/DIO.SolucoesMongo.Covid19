@@ -3,10 +3,10 @@ using System.Configuration;
 using System.IO;
 using System.Threading;
 using CovidBrProcessFileToMongoDb.Business;
-using CovidBrProcessFileToMongoDb.Lib.DownLoadFile;
-using CovidBrProcessFileToMongoDb.Lib.FileTools;
-using CovidBrProcessFileToMongoDb.Lib.ProgressBar;
-using CovidBrProcessFileToMongoDb.Lib.Web;
+using LibConsoleProgressBar;
+using LibFileDownload;
+using LibFileTools;
+using LibWeb;
 
 namespace CovidBrProcessFileToMongoDb
 {
@@ -14,22 +14,34 @@ namespace CovidBrProcessFileToMongoDb
     {
         static void Main(string[] args)
         {
-            // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
-            // e pegar a data do arquivo -- Classe Ler dados da página!
-            string Data = LoadInfoUrl.GetDataUrlCovid19BrFiles();
-            System.Console.WriteLine($"Data do arquivo {Data}");
-            
-            // TODO: -- Classe para fazer barra de progresso na tela do console
-            TesteDoProgressBar();
-
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataSet))
                 System.IO.Directory.CreateDirectory(diretorioDataSet);
             string arquivoDB = ConfigurationManager.AppSettings["file"];
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
-
             DirectoryInfo directoryData = new DirectoryInfo(diretorioDataSet);
+
+            // TODO: Ler a página https://brasil.io/dataset/covid19/files/ 
+            // e pegar a data do arquivo -- Classe Ler dados da página!
+            string Data = "";
+            try
+            {
+                Data = LoadInfoUrl.GetDataUrlCovid19BrFiles("","");
+            }
+            catch (System.Exception)
+            {
+                bool existeArquivoCsv = directoryData.GetFiles("*.csv").Length > 0;
+                foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
+                {
+                    Data = fileToCsv.Name.Replace("/","-").Replace(" - caso_full.csv", "").Trim();
+                }
+            }
+            System.Console.WriteLine($"Data do arquivo {Data}");
+            
+            // TODO: -- Classe para fazer barra de progresso na tela do console
+            TesteDoProgressBar();
+
             bool existeArquivoCsvDoDia = false;
             foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv"))
             {
@@ -93,7 +105,7 @@ namespace CovidBrProcessFileToMongoDb
             // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
-            var ForDb = new RegistroDeDadosDbLocal(new Data.MongoDB());
+            // var ForDb = new RegistroDeDadosDbLocal(new Data.MongoDB());
 
             /* --- Limpar o arquivo CSV para importar pelo MongoDB Compass não funciona
             // --- Importação limitada a 8.000 registros ....
@@ -108,16 +120,18 @@ namespace CovidBrProcessFileToMongoDb
             System.Console.WriteLine("\n");
             */
 
-            
-            System.Console.WriteLine("-------------------------------------------------------");
-            System.Console.WriteLine("Atualizando Banco de Dados ModoDB Atlas com novos dados");
-            System.Console.WriteLine("-------------------------------------------------------");
-            // Processando os arquivos csv e colocando no Banco de Dados MongoDB
-            foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+            using (var ForDb = new RegistroDeDadosDbLocal(new Data.MongoDB()))
             {
-                ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
+                System.Console.WriteLine("-------------------------------------------------------");
+                System.Console.WriteLine("Atualizando Banco de Dados ModoDB Atlas com novos dados");
+                System.Console.WriteLine("-------------------------------------------------------");
+                // Processando os arquivos csv e colocando no Banco de Dados MongoDB
+                foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
+                {
+                    ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
+                }
+                System.Console.WriteLine("\n");
             }
-            System.Console.WriteLine("\n");
 
         }
 

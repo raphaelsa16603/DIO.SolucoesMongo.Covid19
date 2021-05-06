@@ -12,3 +12,10 @@
 #### https://www.nuget.org/packages/mongodb.driver
 - dotnet add package MongoDB.Driver --version 2.12.2
 - dotnet add package MongoDB.Driver 
+
+### Libs de Referência
+- dotnet add reference ../LibConsoleProgressBar/
+- dotnet add reference ../LibFileDownload/
+- dotnet add reference ../LibFileTools/
+- dotnet add reference ../LibToolsLog/
+- dotnet add reference ../LibWeb/
