@@ -6,6 +6,7 @@ namespace CovidBrProcessFileToMongoDb.Data.Collections
 {
     public class DadosCovid
     {
+        // Gerando erro na serialização ...
         [BsonId]
         public ObjectId Id { get; set; }
         
@@ -23,7 +24,11 @@ namespace CovidBrProcessFileToMongoDb.Data.Collections
         public string is_repeated { get; set; }
         public long city_ibglast_available_confirmede_code { get; set; }
 
+        //public double last_available_confirmed_per_100k_inhabitants { get; set; }
         public double last_available_confirmed_per_100k_inhabitants { get; set; }
+
+        //??? Campo extra no banco de dados???
+        public double last_available_confirmed { get; set; }
 
         public DateTime last_available_date { get; set; }
 
@@ -52,6 +57,7 @@ namespace CovidBrProcessFileToMongoDb.Data.Collections
                 long estimated_population_2019, 
                 string is_last, 
                 string is_repeated, 
+                double last_available_confirmed,
                 double last_available_confirmed_per_100k_inhabitants,
                 DateTime last_available_date,
                 double last_available_death_rate,
@@ -73,6 +79,7 @@ namespace CovidBrProcessFileToMongoDb.Data.Collections
           this.estimated_population_2019 = estimated_population_2019;
           this.is_last = is_last;
           this.is_repeated = is_repeated;
+          this.last_available_confirmed = last_available_confirmed;
           this.last_available_confirmed_per_100k_inhabitants = last_available_confirmed_per_100k_inhabitants;
           this.last_available_date = last_available_date;
           this.last_available_death_rate = last_available_death_rate;
@@ -96,6 +103,7 @@ namespace CovidBrProcessFileToMongoDb.Data.Collections
                 long estimated_population_2019, 
                 string is_last, 
                 string is_repeated, 
+                double last_available_confirmed,
                 double last_available_confirmed_per_100k_inhabitants,
                 DateTime last_available_date,
                 double last_available_death_rate,
@@ -118,6 +126,7 @@ namespace CovidBrProcessFileToMongoDb.Data.Collections
           this.estimated_population_2019 = estimated_population_2019;
           this.is_last = is_last;
           this.is_repeated = is_repeated;
+          this.last_available_confirmed = last_available_confirmed;
           this.last_available_confirmed_per_100k_inhabitants = last_available_confirmed_per_100k_inhabitants;
           this.last_available_date = last_available_date;
           this.last_available_death_rate = last_available_death_rate;

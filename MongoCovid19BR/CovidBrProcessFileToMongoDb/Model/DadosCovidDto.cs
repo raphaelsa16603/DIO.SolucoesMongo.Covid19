@@ -18,6 +18,7 @@ namespace CovidBrProcessFileToMongoDb.Models
         public string is_repeated { get; set; }
         public long city_ibglast_available_confirmede_code { get; set; }
 
+        //public double last_available_confirmed_per_100k_inhabitants { get; set; }
         public double last_available_confirmed_per_100k_inhabitants { get; set; }
 
         public DateTime last_available_date { get; set; }

@@ -34,6 +34,7 @@ namespace CovidBrProcessFileToMongoDb.Controller
                 dto.estimated_population_2019, 
                 dto.is_last, 
                 dto.is_repeated, 
+                dto.last_available_confirmed,
                 dto.last_available_confirmed_per_100k_inhabitants,
                 dto.last_available_date,
                 dto.last_available_death_rate,
@@ -242,6 +243,11 @@ namespace CovidBrProcessFileToMongoDb.Controller
             update = Builders<DadosCovid>.Update
                         .Set( s => s.is_repeated, 
                         dto.is_repeated);
+
+            // last_available_confirmed
+            update = Builders<DadosCovid>.Update
+                        .Set( s => s.last_available_confirmed, 
+                        dto.last_available_confirmed);
 
             update = Builders<DadosCovid>.Update
                         .Set( s => s.last_available_confirmed_per_100k_inhabitants, 
