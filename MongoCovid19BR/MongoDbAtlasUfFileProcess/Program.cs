@@ -2,13 +2,13 @@
 using System.Configuration;
 using System.IO;
 using System.Threading;
-using CovidBrProcessFileToMongoDb.Business;
+using MongoDbAtlasUfFileProcess.Business;
 using LibConsoleProgressBar;
 using LibFileDownload;
 using LibFileTools;
 using LibWeb;
 
-namespace CovidBrProcessFileToMongoDb
+namespace MongoDbAtlasUfFileProcess
 {
     class Program
     {
@@ -119,12 +119,23 @@ namespace CovidBrProcessFileToMongoDb
             }
             System.Console.WriteLine("\n");
             */
-
-            using (var ForDb = new RegistroDeDadosDbLocal(new Data.MongoDB()))
+            string uf = "PB";
+            try
             {
+                uf = ConfigurationManager.AppSettings["incrementalUF"];
+            }
+            catch (System.Exception)
+            {
+                uf = "PB";
+            }
+            using (var ForDb = new RegistroDeDadosDbLocal(new Data.MongoDB(), uf))
+            {
+                
                 System.Console.WriteLine("-------------------------------------------------------");
                 System.Console.WriteLine("Atualizando Banco de Dados ModoDB Atlas com novos dados");
                 System.Console.WriteLine("-------------------------------------------------------");
+                System.Console.WriteLine($"---   Filtro:            UF == {uf}  -------");
+                System.Console.WriteLine("------------------------------------------------------");
                 // Processando os arquivos csv e colocando no Banco de Dados MongoDB
                 foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
                 {
@@ -146,5 +157,34 @@ namespace CovidBrProcessFileToMongoDb
             }
             Console.WriteLine("Done.");
 	    }
+
+
+        private static void AddUpdateAppSettings(string key, string value)  
+        {  
+            try  
+            {  
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);  
+                var settings = configFile.AppSettings.Settings;  
+                if (settings[key] == null)  
+                {  
+                    settings.Add(key, value);  
+                }  
+                else  
+                {  
+                    settings[key].Value = value;  
+                }  
+                configFile.Save(ConfigurationSaveMode.Modified);  
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);  
+            }  
+            catch (ConfigurationErrorsException)  
+            {  
+                Console.WriteLine("Error writing app settings");  
+            }  
+        } 
+
+
+
+
+
     }
 }
