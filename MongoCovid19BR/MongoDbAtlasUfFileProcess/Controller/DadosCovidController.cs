@@ -17,7 +17,7 @@ namespace MongoDbAtlasUfFileProcess.Controller
         {
             _mongoDB = mongoDB;
             _dadosCovidCollection = _mongoDB.DB.GetCollection<DadosCovid>
-                                       (typeof(DadosCovid).Name.ToLower()); // TODO: Modificar?
+                                       (typeof(DadosCovid).Name.Trim());//.Name.ToLower());
         }
 
         // POST
