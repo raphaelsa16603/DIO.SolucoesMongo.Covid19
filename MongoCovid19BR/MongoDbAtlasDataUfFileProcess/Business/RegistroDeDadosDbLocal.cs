@@ -38,6 +38,10 @@ namespace MongoDbAtlasDataUfFileProcess.Business
                     _ufFilter = uf;
                 }
             }
+            else
+            {
+                _ufFilter = incrementalUF.Trim();
+            }
             if(incrementalData.Trim().Equals(""))
             {
                 string data = "";
@@ -55,6 +59,10 @@ namespace MongoDbAtlasDataUfFileProcess.Business
                 {
                     _DataFilter = data;
                 }
+            }
+            else
+            {
+                _DataFilter = incrementalData.Trim();
             }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
             // Criar Diretório se não existe
