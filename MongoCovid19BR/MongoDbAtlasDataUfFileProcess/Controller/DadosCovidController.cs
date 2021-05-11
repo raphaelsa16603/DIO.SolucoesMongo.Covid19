@@ -168,19 +168,45 @@ namespace MongoDbAtlasDataUfFileProcess.Controller
                 // Não estou conseguindo debugar o erro da pesquisa
                 // Trava tudo e não passa nem no catch
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
-                
-                var DadosList = oDadosCovid.ToList();
-                if(DadosList == null)
+
+                if(oDadosCovid != null)
+                {
+                    var DadosList = await oDadosCovid.ToListAsync();
+                    if(DadosList == null)
+                    {
+                        Dados = null;
+                    } 
+                    else if (DadosList.Count == 0)
+                    {
+                        try
+                        {
+                            var oDadosCovidSync = _dadosCovidCollection.Find(complexFilter);
+                            DadosList = oDadosCovidSync.ToList();
+                            if(DadosList == null)
+                            {
+                                Dados = null;
+                            } 
+                            else if (DadosList.Count == 0)
+                            {
+                                Dados = null;
+                            }
+                            else if (DadosList.Count > 0)
+                            {
+                                Dados = DadosList[0];
+                            }
+                        }
+                        catch (System.Exception)
+                        {
+                            Dados = null;
+                        }
+                    } 
+                    else if (DadosList.Count > 0)
+                    {
+                        Dados = DadosList[0];
+                    }
+                } else
                 {
                     Dados = null;
-                } 
-                else if (DadosList.Count == 0)
-                {
-                    Dados = null;
-                } 
-                else if (DadosList.Count > 0)
-                {
-                    Dados = DadosList[0];
                 }
 
             
