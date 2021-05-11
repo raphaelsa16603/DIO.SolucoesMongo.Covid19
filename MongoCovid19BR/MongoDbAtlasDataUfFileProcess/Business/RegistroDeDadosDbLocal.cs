@@ -62,6 +62,14 @@ namespace MongoDbAtlasDataUfFileProcess.Business
             }
             else
             {
+                try
+                {
+                    var teste = DateTime.Parse(incrementalData.Trim());
+                }
+                catch (System.Exception)
+                {
+                    incrementalData = "2021-01-13";
+                }
                 _DataFilter = incrementalData.Trim();
             }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
