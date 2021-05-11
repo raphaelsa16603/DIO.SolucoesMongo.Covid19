@@ -1,0 +1,1 @@
+{date: {$gte: new Date(2021, 4, 10), $lte: new Date(2021, 4, 10)}, city_ibge_code: "2504009"}
