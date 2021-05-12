@@ -38,6 +38,23 @@ namespace IncrementalDataFileProcessSQLite.Business
                     _DataFilter = data;
                 }
             }
+            else
+            {
+                string data = incrementalData.Trim();
+                try
+                {
+                    var teste = DateTime.Parse(data);
+                }
+                catch (System.Exception)
+                {
+                    data = "2021-01-13";
+                }
+                
+                if (!data.Trim().Equals(""))
+                {
+                    _DataFilter = data;
+                }
+            }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataErro))
