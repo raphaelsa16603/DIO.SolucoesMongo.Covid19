@@ -29,6 +29,8 @@ namespace CovidBrApi.Controllers
                     string mesfim, string anofim)
         {
             var filters = new List<FilterDefinition<DadosCovid>>();
+            // Na data final tem que acrescentar mais um mês para a consulta retornar o último mes também.
+            // Por alguma especificiade do MongoDB 
             var DateFilterFim = new DateTime(Int32.Parse(anofim), Int32.Parse(mesfim), 01).AddMonths(1);
             var DateFilterInit = new DateTime(Int32.Parse(anoinit), Int32.Parse(mesinit), 01);
             var filter1 = Builders<DadosCovid>.Filter.Eq

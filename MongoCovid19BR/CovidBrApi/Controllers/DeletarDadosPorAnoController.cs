@@ -28,8 +28,12 @@ namespace CovidBrApi.Controllers
         public async void Delete(string ano)
         {
             var filters = new List<FilterDefinition<DadosCovid>>();
+            // Especificidade do MongoDB por causa do operador Gt e Lt, 
+            // pois não contempla o igual, eis que a 
+            // consulta da data tem que
+            // ser nos dias anteriores e posterior 
             var DateFilter = new DateTime(Int32.Parse(ano), 01, 01).AddDays(-1);
-            var DateFilterEnd = new DateTime(Int32.Parse(ano), 12, 31);
+            var DateFilterEnd = new DateTime(Int32.Parse(ano), 12, 31).AddDays(1);
             var filter2 = Builders<DadosCovid>.Filter.Gt
                     (inf => inf.date, DateFilter);        
             var filter3 = Builders<DadosCovid>.Filter.Lt

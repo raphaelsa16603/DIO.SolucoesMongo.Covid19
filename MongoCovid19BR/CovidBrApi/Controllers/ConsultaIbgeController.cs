@@ -31,8 +31,12 @@ namespace CovidBrApi.Controllers
                     string dia, string mes, string ano)
         {
             var filters = new List<FilterDefinition<DadosCovid>>();
+            // Especificidade do MongoDB por causa do operador Gt e Lt, 
+            // pois não contempla o igual, eis que a 
+            // consulta da data tem que
+            // ser nos dias anteriores e posterior 
             var DateFilter = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia)).AddDays(-1);
-            var DateFilterEnd = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia));
+            var DateFilterEnd = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia)).AddDays(1);
             var filter1 = Builders<DadosCovid>.Filter.Eq
                     (inf => inf.city_ibge_code, city_ibge_code);
             var filter2 = Builders<DadosCovid>.Filter.Gt
@@ -46,7 +50,7 @@ namespace CovidBrApi.Controllers
             try
             {
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
-                var Dados = await oDadosCovid.ToListAsync();
+                var Dados =  oDadosCovid.ToList();
             
                 return Ok(Dados);
             }
