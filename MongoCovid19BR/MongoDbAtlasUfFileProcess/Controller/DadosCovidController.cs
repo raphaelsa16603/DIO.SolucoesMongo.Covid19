@@ -150,8 +150,12 @@ namespace MongoDbAtlasUfFileProcess.Controller
                         
             DadosCovid Dados = null;
             var filters = new List<FilterDefinition<DadosCovid>>();
+            // Especificidade do MongoDB por causa do operador Gt e Lt, 
+            // pois não contempla o igual, eis que a 
+            // consulta da data tem que
+            // ser nos dias anterior e posterior 
             var DateFilter = new DateTime(obj.date.Year, obj.date.Month, obj.date.Day).AddDays(-1);
-            var DateFilterEnd = new DateTime(obj.date.Year, obj.date.Month, obj.date.Day);
+            var DateFilterEnd = new DateTime(obj.date.Year, obj.date.Month, obj.date.Day).AddDays(1);
             var filter1 = Builders<DadosCovid>.Filter.Eq
                     (inf => inf.city_ibge_code, obj.city_ibge_code);
             var filter2 = Builders<DadosCovid>.Filter.Gt
@@ -205,8 +209,12 @@ namespace MongoDbAtlasUfFileProcess.Controller
             }
 
             var filters = new List<FilterDefinition<DadosCovid>>();
+            // Especificidade do MongoDB por causa do operador Gt e Lt, 
+            // pois não contempla o igual, eis que a 
+            // consulta da data tem que
+            // ser nos dias anterior e posterior 
             var DateFilter = new DateTime(dto.date.Year, dto.date.Month, dto.date.Day).AddDays(-1);
-            var DateFilterEnd = new DateTime(dto.date.Year, dto.date.Month, dto.date.Day);
+            var DateFilterEnd = new DateTime(dto.date.Year, dto.date.Month, dto.date.Day).AddDays(1);
             var filter1 = Builders<DadosCovid>.Filter.Eq
                     (inf => inf.city_ibge_code, dto.city_ibge_code);
             var filter2 = Builders<DadosCovid>.Filter.Gt
@@ -369,8 +377,12 @@ namespace MongoDbAtlasUfFileProcess.Controller
             }
 
             var filters = new List<FilterDefinition<DadosCovid>>();
+            // Especificidade do MongoDB por causa do operador Gt e Lt, 
+            // pois não contempla o igual, eis que a 
+            // consulta da data tem que
+            // ser nos dias anterior e posterior 
             var DateFilter = new DateTime(dto.date.Year, dto.date.Month, dto.date.Day).AddDays(-1);
-            var DateFilterEnd = new DateTime(dto.date.Year, dto.date.Month, dto.date.Day);
+            var DateFilterEnd = new DateTime(dto.date.Year, dto.date.Month, dto.date.Day).AddDays(1);
             var filter1 = Builders<DadosCovid>.Filter.Eq
                     (inf => inf.city_ibge_code, dto.city_ibge_code);
             var filter2 = Builders<DadosCovid>.Filter.Gt
