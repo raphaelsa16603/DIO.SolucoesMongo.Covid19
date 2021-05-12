@@ -46,7 +46,7 @@ namespace CovidBrApi.Controllers
             try
             {
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
-                var Dados = oDadosCovid.ToList();
+                var Dados = await oDadosCovid.ToListAsync();
             
                 return Ok(Dados);
             }
