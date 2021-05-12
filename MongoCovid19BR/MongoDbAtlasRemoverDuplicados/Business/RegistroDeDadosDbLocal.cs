@@ -5,6 +5,7 @@ using MongoDbAtlasRemoverDuplicados.Controller;
 using MongoDbAtlasRemoverDuplicados.Model;
 using LibConsoleProgressBar;
 using LibToolsLog;
+using System.Collections.Generic;
 
 namespace MongoDbAtlasRemoverDuplicados.Business
 {
@@ -129,9 +130,17 @@ namespace MongoDbAtlasRemoverDuplicados.Business
                             {
                                 try
                                 {
-                                    DadosCovid DbObj = controller.Pesquisa(oDado);
+                                    List<DadosCovid> DbObj = controller.PesquisaList(oDado);
                                     if (DbObj == null)
-                                        codigo = controller.Cadastro(oDado);
+                                    {
+                                        if(DbObj.Count > 1)
+                                        {
+                                            DadosCovid DadosCovidDuplicadoInicalDb = DbObj[0];
+                                            var DbCov = controller.DeleteDuplicados
+                                                (DadosCovidDuplicadoInicalDb);
+                                            codigo = TrataUid(DbCov.uId);
+                                        }
+                                    }
                                 }
                                 catch (System.Exception ex)
                                 {
@@ -160,6 +169,30 @@ namespace MongoDbAtlasRemoverDuplicados.Business
                 tools.UpdateText($"{barra} - " + 
                     $"{(int) (percentagem)}% - {contador} de {totallinhas}");
             }
+        }
+
+        public int TrataUid(string uId)
+        { 
+            string myuuidAsString = uId;
+            string numerosUid = "";
+            // Pegar só os números
+            foreach(char l in myuuidAsString)
+            {
+                if(l >= '0' && l <= '9')
+                    numerosUid += l;
+            }
+
+            int iRet = 0;
+            try
+            {
+                iRet = int.Parse(numerosUid);    
+            }
+            catch (Exception)
+            {
+                iRet = 1;
+            }
+            
+            return iRet;
         }
 
         private void ExtrairDadosDoCvsParaDb(string[] listaCampos, DadosCovid oDado)

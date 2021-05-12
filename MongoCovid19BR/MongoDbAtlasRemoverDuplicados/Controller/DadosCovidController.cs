@@ -403,6 +403,118 @@ namespace MongoDbAtlasRemoverDuplicados.Controller
             return dto;
         }
 
+        public DadosCovid DeleteDuplicados(DadosCovid dto)
+        {
+            var dados = DeleteDuplicadosAsync(dto).Result;
+
+            return dados;
+        }
+
+        public async Task<DadosCovid> DeleteDuplicadosAsync(DadosCovid dto)
+        {
+            if (dto == null)
+            {
+                throw new System.Exception("Sem o objeto de dados");
+            }
+            List<DadosCovid> DadosList = null;
+            try
+            {
+                DadosList = await PesquisaListAsync(dto);
+            }
+            catch (System.Exception)
+            {
+                DadosList = null;
+            }
+
+            if(DadosList != null)
+            {
+                if(DadosList.Count > 0)
+                {
+                    foreach(DadosCovid dupl in DadosList)
+                    {
+                        if(dupl.uId != dto.uId)
+                        {
+                            var filter = Builders<DadosCovid>.Filter.Eq
+                                (inf => inf.uId, dupl.uId);
+                            try
+                            {
+                                var result = await  _dadosCovidCollection.DeleteOneAsync(filter);
+                            }
+                            catch (System.Exception ex)
+                            {
+                                LogTools.LogErroToFile
+                                    ($" Erro na remoção dos dados do Objeto {dupl.uId}: {ex.Message}", ex.StackTrace);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return dto;
+        }
+
+        public async Task<List<DadosCovid>> PesquisaListAsync(DadosCovid obj)
+        {
+            if (obj == null)
+            {
+                throw new System.Exception("Sem o Objeto de Dados para pesquisa do registro");
+            }
+
+            if( obj.city_ibge_code.Trim().Equals(""))
+            {
+                throw new System.Exception("Sem  city_ibge_code para pesquisa do registro");
+            }
+
+                        
+            List<DadosCovid> DadosList = null;
+            var filters = new List<FilterDefinition<DadosCovid>>();
+            // Especificidade do MongoDB por causa do operador Gt e Lt, 
+            // pois não contempla o igual, eis que a 
+            // consulta da data tem que
+            // ser nos dias anterior e posterior 
+            var DateFilter = new DateTime(obj.date.Year, obj.date.Month, obj.date.Day).AddDays(-1);
+            var DateFilterEnd = new DateTime(obj.date.Year, obj.date.Month, obj.date.Day).AddDays(1);
+            var filter1 = Builders<DadosCovid>.Filter.Eq
+                    (inf => inf.city_ibge_code, obj.city_ibge_code);
+            var filter2 = Builders<DadosCovid>.Filter.Gt
+                    (inf => inf.date, DateFilter);        
+            var filter3 = Builders<DadosCovid>.Filter.Lt
+                    (inf => inf.date, DateFilterEnd);
+            filters.Add(filter1);
+            filters.Add(filter2);
+            filters.Add(filter3);
+            var complexFilter = Builders<DadosCovid>.Filter.And(filters);
+
+            try
+            {
+                // Não estou conseguindo debugar o erro da pesquisa
+                // Trava tudo e não passa nem no catch
+                var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
+                
+                DadosList = oDadosCovid.ToList();
+                            
+                return DadosList;
+            }
+            catch (System.Exception ex)
+            {
+                LogTools.LogErroToFile
+                    ($" Erro na Pesquisa pelo Objeto {ex.Message}", ex.StackTrace);
+            }
+
+            return DadosList;
+        }
+
+        public List<DadosCovid> PesquisaList(DadosCovid obj)
+        {
+            // PesquisaCaller caller = new PesquisaCaller(PesquisaAsync);
+            // IAsyncResult result = caller.BeginInvoke(obj, null, null);
+            // var Dados = caller.EndInvoke(result);
+            var Dados = PesquisaListAsync(obj).Result;
+
+            return Dados;
+        }
+        
+
         public void Dispose()
         {
             // Não existe Dispose para o MongoDB!

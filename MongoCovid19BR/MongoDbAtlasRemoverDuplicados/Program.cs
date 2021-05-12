@@ -141,12 +141,12 @@ namespace MongoDbAtlasRemoverDuplicados
             using (var ForDb = new RegistroDeDadosDbLocal(new Data.MongoDB(), uf, data))
             {
                 
-                System.Console.WriteLine("-------------------------------------------------------");
-                System.Console.WriteLine("Atualizando Banco de Dados ModoDB Atlas com novos dados");
-                System.Console.WriteLine("-------------------------------------------------------");
+                System.Console.WriteLine("--------------------------------------------------------------");
+                System.Console.WriteLine("Removendo registros duplicados do Banco de Dados ModoDB Atlas");
+                System.Console.WriteLine("--------------------------------------------------------------");
                 System.Console.WriteLine($"---   Filtro:            UF == {uf}  -------");
                 System.Console.WriteLine($"---   Filtro:            Data >= {data}  -------");
-                System.Console.WriteLine("------------------------------------------------------");
+                System.Console.WriteLine("--------------------------------------------------------------");
                 // Processando os arquivos csv e colocando no Banco de Dados MongoDB
                 foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv"))
                 {
