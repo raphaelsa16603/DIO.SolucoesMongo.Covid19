@@ -32,7 +32,7 @@ namespace CovidBrApi.Controllers
             // Especificidade do MongoDB por causa do operador Gt e Lt, 
             // pois não contempla o igual, eis que a 
             // consulta da data tem que
-            // ser nos dias anteriores e posterior 
+            // ser nos dias anterior e posterior 
             var DateFilter = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia)).AddDays(-1);
             var DateFilterEnd = new DateTime(Int32.Parse(ano), Int32.Parse(mes), Int32.Parse(dia)).AddDays(1);
             var filter1 = Builders<DadosCovid>.Filter.Eq
