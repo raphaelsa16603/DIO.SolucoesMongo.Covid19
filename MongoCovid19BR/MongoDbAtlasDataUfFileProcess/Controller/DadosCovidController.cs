@@ -115,6 +115,14 @@ namespace MongoDbAtlasDataUfFileProcess.Controller
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(filter);
                 var Dados = oDadosCovid.ToList();
             
+                if(Dados == null)
+                {
+                    return null;
+                } else if ( Dados.Count <= 0)
+                {
+                    return null;
+                }
+                
                 return Dados[0];
             }
             catch (System.Exception ex)
@@ -169,7 +177,7 @@ namespace MongoDbAtlasDataUfFileProcess.Controller
                 // Trava tudo e não passa nem no catch
                 var oDadosCovid = await  _dadosCovidCollection.FindAsync(complexFilter);
 
-                if(oDadosCovid != null)
+                if(oDadosCovid != null && oDadosCovid.Current != null)
                 {
                     var DadosList = await oDadosCovid.ToListAsync();
                     if(DadosList == null)
@@ -206,7 +214,27 @@ namespace MongoDbAtlasDataUfFileProcess.Controller
                     }
                 } else
                 {
-                    Dados = null;
+                    try
+                    {
+                        var oDadosCovidSync = _dadosCovidCollection.Find(complexFilter);
+                        var DadosList = oDadosCovidSync.ToList();
+                        if(DadosList == null)
+                        {
+                            Dados = null;
+                        } 
+                        else if (DadosList.Count == 0)
+                        {
+                            Dados = null;
+                        }
+                        else if (DadosList.Count > 0)
+                        {
+                            Dados = DadosList[0];
+                        }
+                    }
+                    catch (System.Exception)
+                    {
+                        Dados = null;
+                    }
                 }
 
             
