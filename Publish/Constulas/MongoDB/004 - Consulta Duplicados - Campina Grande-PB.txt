@@ -1,1 +1,4 @@
+// No Mongo Compass isso é 10/05/2021 o mês começa do 0
 {date: {$gte: new Date(2021, 4, 10), $lte: new Date(2021, 4, 10)}, city_ibge_code: "2504009"}
+// Dados duplicados foram gerados depois de 13/01/2021
+{date: {$gte: new Date(2021, 0, 13), $lte: new Date(2021, 0, 13)}, city_ibge_code: "2504009"}

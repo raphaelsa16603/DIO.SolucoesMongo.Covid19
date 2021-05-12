@@ -131,7 +131,7 @@ namespace MongoDbAtlasRemoverDuplicados.Business
                                 try
                                 {
                                     List<DadosCovid> DbObj = controller.PesquisaList(oDado);
-                                    if (DbObj == null)
+                                    if (DbObj != null)
                                     {
                                         if(DbObj.Count > 1)
                                         {
@@ -145,7 +145,7 @@ namespace MongoDbAtlasRemoverDuplicados.Business
                                 catch (System.Exception ex)
                                 {
                                     // Se der erro é para registrar em arquivo de log
-                                    LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                                    LogTools.LogErroToFile($" Erro na deleção de duplicados {ex.Message}", ex.StackTrace);
                                 }
                             }
                             else
