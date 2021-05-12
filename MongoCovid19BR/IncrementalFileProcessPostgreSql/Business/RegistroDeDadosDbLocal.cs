@@ -29,6 +29,10 @@ namespace IncrementalFileProcessPostgreSql.Business
                     _ufFilter = uf;
                 }
             }
+            else
+            {
+                _ufFilter = incrementalUF.Trim();
+            }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataErro))
