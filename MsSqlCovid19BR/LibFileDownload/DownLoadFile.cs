@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using LibConsoleProgressBar;
 
@@ -12,27 +13,26 @@ namespace LibFileDownload
     {
         private ConsoleProgressBar progress = null;
         private string currentText = string.Empty;
+        private int _percentagem = 0;
 
-        public void DownLoadFileInBackgroundByProgBar4(string address)
-        {
-            string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
-            string arquivoDB = ConfigurationManager.AppSettings["file"];
+        public void DownLoadFileInBackgroundByProgBar4(string address) {
+            string diretorioDataSet = ConfigurationManager.AppSettings["dir"].Replace('/', Path.DirectorySeparatorChar);
+            string arquivoDB = ConfigurationManager.AppSettings["file"].Replace('/', Path.DirectorySeparatorChar);
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
             System.Console.WriteLine($"Arquivo : {pathString}");
             System.Console.WriteLine("");
             // Criar Diretório se não existe
-            if(!System.IO.Directory.Exists(diretorioDataSet))
+            if (!System.IO.Directory.Exists(diretorioDataSet))
                 System.IO.Directory.CreateDirectory(diretorioDataSet);
 
             //WebClient client = new WebClient();
-            using (WebClient client = new WebClient())
-            {
+            using (WebClient client = new WebClient()) {
                 Uri uri = new Uri(address);
                 // Problema para baixar o arquivo ??? De uma hora para outra
                 //  deixou de baixar o arquivo .gz do site pelo programa.
                 client.Headers["Cookie"] = "security=true";
                 client.Encoding = System.Text.Encoding.UTF8;
-                client.Headers.Add("user-agent", 
+                client.Headers.Add("user-agent",
                 "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
 
                 // Specify a DownloadFileCompleted handler here...
@@ -40,46 +40,58 @@ namespace LibFileDownload
                 // Specify a progress notification handler.
                 client.DownloadProgressChanged += DownloadProgressCallbackByProgBar4;
 
-                using (ConsoleProgressBar progress = new ConsoleProgressBar())
-                {
-                    try
-                    {
-                        client.DownloadFileAsync(uri, pathString);    
-                    }
-                    catch (System.Exception ex)
-                    {
+                using (ConsoleProgressBar progress = new ConsoleProgressBar()) {
+                    try {
+                        client.DownloadFileAsync(uri, pathString);
+                    } catch (System.Exception ex) {
                         System.Console.WriteLine($"Erro no Dowload {ex.Message}!");
                         client.DownloadFile(uri, pathString);
                     }
                 }
             }
+            VerificarArquivoDownloadNormal(address, pathString);
+
+        }
+
+        private void VerificarArquivoDownloadNormal(string address, string pathString) {
+            Thread.Sleep(100);
             // Tentativas extras de fazer o donwload sincrono
-            FileInfo fi = new FileInfo(pathString);
-            if(fi == null)
-            {
-                using (WebClient client = new WebClient())
-                {
+            FileInfo fi = null;
+
+            for (int i = 0; i < 15; i++) {
+                fi = new FileInfo(pathString);
+                if (fi == null) {
+                    Thread.Sleep(100);
+                } else if (fi.Length <= 0) {
+                    Thread.Sleep(100);
+                }
+            }
+
+            if (fi == null) {
+                using (WebClient client = new WebClient()) {
                     Uri uri = new Uri(address);
                     client.DownloadFile(uri, pathString);
                 }
-            }
-            else if( fi.Length <= 0 )
-            {
-                using (WebClient client = new WebClient())
-                {
+            } else if (fi.Length <= 0) {
+                using (WebClient client = new WebClient()) {
                     Uri uri = new Uri(address);
                     client.DownloadFile(uri, pathString);
                 }
             }
             System.Console.WriteLine("Aguarde conclusão do Download...");
-            
+
+            for(int esperar = 0; this._percentagem < 100; esperar++) {
+                Thread.Sleep(100);
+            }
         }
 
         private void DownloadProgressCallbackByProgBar4(object sender, DownloadProgressChangedEventArgs e)
         {
-            if(this.progress != null)
+            if (this.progress != null) {
                 this.progress.Report(e.ProgressPercentage);
+            }
 
+            this._percentagem = e.ProgressPercentage;
             string barra = BarraProgressoTexto('#', 12, e.ProgressPercentage);
             UpdateText($"{barra} - {e.ProgressPercentage} % Completo... " +
             $" Baixado {e.BytesReceived} de {e.TotalBytesToReceive} bytes...");
