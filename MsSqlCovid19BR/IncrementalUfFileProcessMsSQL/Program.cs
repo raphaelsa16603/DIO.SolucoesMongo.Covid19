@@ -1,14 +1,14 @@
-﻿using LibConsoleProgressBar;
-using LibFileDownload;
-using LibFileTools;
-using LibWeb;
-using MsSqlCovidBrFileProcess.Business;
-using System;
+﻿using System;
 using System.Configuration;
 using System.IO;
 using System.Threading;
+using IncrementalUfFileProcessMsSQL.Business;
+using LibConsoleProgressBar;
+using LibFileDownload;
+using LibFileTools;
+using LibWeb;
 
-namespace MsSqlCovidBrFileProcess {
+namespace IncrementalUfFileProcessMsSQL {
     class Program {
         static void Main(string[] args) {
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"].Replace('/', Path.DirectorySeparatorChar);
@@ -34,6 +34,9 @@ namespace MsSqlCovidBrFileProcess {
 
             // TODO: -- Classe para fazer barra de progresso na tela do console
             TesteDoProgressBar();
+
+
+
 
             bool existeArquivoCsvDoDia = false;
             foreach (FileInfo fileToCsv in directoryData.GetFiles("*.csv")) {
@@ -94,12 +97,14 @@ namespace MsSqlCovidBrFileProcess {
             // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
-
-
-            using (var ForDb = new RegistroDeDadosDbLocal()) {
-                System.Console.WriteLine("--------------------------------------------------------");
-                System.Console.WriteLine("Atualizando Banco de Dados MicrosoftSQL com novos dados");
-                System.Console.WriteLine("--------------------------------------------------------");
+ 
+            using (var ForDb = new RegistroDeDadosDbLocal("")) {
+                string uf = ConfigurationManager.AppSettings["incrementalUF"];
+                System.Console.WriteLine("---------------------------------------------------------");
+                System.Console.WriteLine("Atualizando Banco de Dados Microsoft SQL com novos dados");
+                System.Console.WriteLine("---------------------------------------------------------");
+                System.Console.WriteLine($"-----   Filtro:              UF == {uf}          -------");
+                System.Console.WriteLine("---------------------------------------------------------");
                 // Processando os arquivos csv e colocando no Banco de Dados SQLite
                 foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv")) {
                     ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
@@ -107,6 +112,9 @@ namespace MsSqlCovidBrFileProcess {
                 System.Console.WriteLine("\n");
             }
 
+
+
+            // TODO: Precessar o arquivo CSV e enviar para a API Rest com MongoDB
         }
 
         static void TesteDoProgressBar() {

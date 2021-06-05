@@ -1,12 +1,12 @@
 using System;
 using System.Configuration;
 using System.IO;
+using IncrementalDataFileProcessMsSQL.Controller;
 using LibConsoleProgressBar;
+using IncrementalDataFileProcessMsSQL.Model;
 using LibToolsLog;
-using MsSqlCovidBrFileProcess.Controller;
-using MsSqlCovidBrFileProcess.Model;
 
-namespace MsSqlCovidBrFileProcess.Business
+namespace IncrementalDataFileProcessMsSQL.Business
 {
     public class RegistroDeDadosDbLocal : IDisposable
     {
@@ -15,10 +15,45 @@ namespace MsSqlCovidBrFileProcess.Business
         string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
 
+        string _DataFilter = "2021-01-13";
+
         DadosCovidController controller;
 
-        public RegistroDeDadosDbLocal()
+        public RegistroDeDadosDbLocal(string incrementalData)
         {
+            if(incrementalData.Trim().Equals(""))
+            {
+                string data = "";
+                try
+                {
+                    data = ConfigurationManager.AppSettings["incrementalData"];
+                    var teste = DateTime.Parse(data);
+                }
+                catch (System.Exception)
+                {
+                    data = "2021-01-13";
+                }
+                
+                if (!data.Trim().Equals(""))
+                {
+                    _DataFilter = data;
+                }
+            } else {
+                string data = "";
+                try 
+                {
+                    data = incrementalData;
+                    var teste = DateTime.Parse(data);
+                } 
+                catch (System.Exception) 
+                {
+                    data = "2021-01-13";
+                }
+
+                if (!data.Trim().Equals("")) {
+                    _DataFilter = data;
+                }
+            }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"].Replace('/', Path.DirectorySeparatorChar);
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataErro))
@@ -45,7 +80,7 @@ namespace MsSqlCovidBrFileProcess.Business
             
             fileCsvLimpo = System.IO.Path.Combine(diretorioDataSetLimpo, FileNameLimpo);
 
-            controller = DadosCovidController.GetInstance(new Context());
+            controller = DadosCovidController.GetInstance(new Model.Context());
         }
         
         public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
@@ -84,35 +119,51 @@ namespace MsSqlCovidBrFileProcess.Business
                 if(oDado != null)
                 {
                     int codigo = 0;
-                    try
+                    if(oDado.date != null)
                     {
-                        // Conversão para metódos sincronos funcionou mais deixou super lento
-                        DadosCovid DbObj = controller.Pesquisa(oDado);
-                        if (DbObj == null) {
-                            if (contador < totallinhas) // TODO: Revisar essa lógica
-                                codigo = controller.Cadastro(oDado);
-                            else
-                                codigo = controller.CadastroSimples(oDado);
-                        } else {
-                            // Compara dados do arquivo com dados da tabela
-                            if (!OsDadosSaoIguais(oDado, DbObj)) {
-                                // Verificação extra
-                                // Comparar date e city_ibge_code
-                                if (oDado.city_ibge_code.Trim() == DbObj.city_ibge_code.Trim()) {
-                                    if (oDado.date.CompareTo(DbObj.date) == 0) {
-                                        //Não sendo iguais os outros dados atualiza o registro do DB
-                                        DadosCovid DbAtualizado = controller.Update(DbObj.Id, oDado);
+                        if(oDado.date >= DateTime.Parse(_DataFilter))
+                        {
+                            try
+                            {
+                                // Conversão para metódos sincronos funcionou mais deixou super lento
+                                DadosCovid DbObj = controller.Pesquisa(oDado);
+                                if (DbObj == null)
+                                {
+                                    if(contador < totallinhas) // TODO: Revisar essa lógica
+                                        codigo = controller.Cadastro(oDado);
+                                    else
+                                        codigo = controller.CadastroSimples(oDado);
+                                } 
+                                else
+                                {
+                                    // Compara dados do arquivo com dados da tabela
+                                    if(!OsDadosSaoIguais(oDado, DbObj))
+                                    {
+                                        // Verificação extra
+                                        // Comparar date e city_ibge_code
+                                        if(oDado.city_ibge_code.Trim() == DbObj.city_ibge_code.Trim())
+                                        {
+                                            if(oDado.date.CompareTo(DbObj.date) == 0)
+                                            {
+                                                //Não sendo iguais os outros dados atualiza o registro do DB
+                                                DadosCovid DbAtualizado = controller.Update(DbObj.Id, oDado);
+                                            }
+                                        }
+
                                     }
+
                                 }
-
                             }
-
+                            catch (System.Exception ex)
+                            {
+                                // Se der erro é para registrar em arquivo de log
+                                LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                            }
                         }
-                    }
-                    catch (System.Exception ex)
-                    {
-                        // Se der erro é para registrar em arquivo de log
-                        LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                        else
+                        {
+                            // Registro dispensado
+                        }
                     }
                 }
 
@@ -272,135 +323,178 @@ namespace MsSqlCovidBrFileProcess.Business
             }
         }
 
-
-        private bool OsDadosSaoIguais(DadosCovid oDadoArquivo, DadosCovid oDadoBanco) {
+        private bool OsDadosSaoIguais(DadosCovid oDadoArquivo, DadosCovid oDadoBanco)
+        {
             bool igual = true;
 
-            try {
-                if (oDadoArquivo.city.Trim() != oDadoBanco.city.Trim()) {
+            try
+            {
+                if(oDadoArquivo.city.Trim() != oDadoBanco.city.Trim())
+                {
                     return false;
                 }
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
 
             // Campos principais --------------------------------------------
             // public string city_ibge_code { get; set; }
-            if (oDadoArquivo.city_ibge_code.Trim() != oDadoBanco.city_ibge_code.Trim()) {
+            if(oDadoArquivo.city_ibge_code.Trim() != oDadoBanco.city_ibge_code.Trim())
+            {
                 return false;
             }
             // public DateTime date { get; set; }
-            if (oDadoArquivo.date.CompareTo(oDadoBanco.date) != 0) {
+            if(oDadoArquivo.date.CompareTo(oDadoBanco.date) != 0)
+            {
                 return false;
             }
             // Campos principais --------------------------------------------
 
             // public string epidemiological_week { get; set; }
-            try {
-                if (oDadoArquivo.epidemiological_week.Trim() != oDadoBanco.epidemiological_week.Trim()) {
+            try
+            {
+                if(oDadoArquivo.epidemiological_week.Trim() != oDadoBanco.epidemiological_week.Trim())
+                {
                     return false;
                 }
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
 
             // public long estimated_population { get; set; }
-            try {
-                if (oDadoArquivo.estimated_population != oDadoBanco.estimated_population) {
+            try
+            {
+                if( oDadoArquivo.estimated_population != oDadoBanco.estimated_population)
+                {
                     return false;
                 }
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public long estimated_population_2019 { get; set; }
-            try {
-                if (oDadoArquivo.estimated_population_2019 != oDadoBanco.estimated_population_2019) {
+            try
+            {
+                if(oDadoArquivo.estimated_population_2019 != oDadoBanco.estimated_population_2019)
+                {
                     return false;
                 }
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public string is_last { get; set; }
-            try {
-                if (oDadoArquivo.is_last.Trim().ToLower() != oDadoBanco.is_last.Trim().ToLower()) {
+            try
+            {
+                if(oDadoArquivo.is_last.Trim().ToLower() != oDadoBanco.is_last.Trim().ToLower())
+                {
                     return false;
                 }
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public string is_repeated { get; set; }
-            try {
-                if (oDadoArquivo.is_repeated.Trim().ToLower() != oDadoBanco.is_repeated.Trim().ToLower()) {
+            try
+            {
+                if(oDadoArquivo.is_repeated.Trim().ToLower() != oDadoBanco.is_repeated.Trim().ToLower())
+                {
                     return false;
                 }
-            } catch (System.Exception) {
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public long city_ibglast_available_confirmede_code { get; set; }
-            if (oDadoArquivo.city_ibglast_available_confirmede_code !=
-                oDadoBanco.city_ibglast_available_confirmede_code) {
-                return false;
-            }
-
+            if(oDadoArquivo.city_ibglast_available_confirmede_code !=
+                oDadoBanco.city_ibglast_available_confirmede_code)
+                {
+                    return false;
+                }
+                
             // public double last_available_confirmed_per_100k_inhabitants { get; set; }
             // oDado.last_available_confirmed_per_100k_inhabitants = 
             //     Double.Parse(listaCampos[9].Trim());
-            try {
-                if (oDadoArquivo.last_available_confirmed_per_100k_inhabitants !=
-                    oDadoBanco.last_available_confirmed_per_100k_inhabitants) {
-                    return false;
-                }
-            } catch (System.Exception) {
+            try
+            {
+                if(oDadoArquivo.last_available_confirmed_per_100k_inhabitants !=
+                    oDadoBanco.last_available_confirmed_per_100k_inhabitants)
+                    {
+                        return false;
+                    }
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public DateTime last_available_date { get; set; }
-            if (oDadoArquivo.last_available_date.CompareTo(oDadoBanco.last_available_date) != 0) {
+            if(oDadoArquivo.last_available_date.CompareTo(oDadoBanco.last_available_date) != 0)
+            {
                 return false;
             }
             // public double last_available_death_rate { get; set; }
-            try {
-                if (oDadoArquivo.last_available_death_rate !=
-                    oDadoBanco.last_available_death_rate) {
-                    return false;
-                }
-            } catch (System.Exception) {
+            try
+            {
+                if(oDadoArquivo.last_available_death_rate != 
+                    oDadoBanco.last_available_death_rate)
+                    {
+                        return false;
+                    }
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public long last_available_deaths { get; set; }
-            try {
-                if (oDadoArquivo.last_available_deaths !=
-                    oDadoBanco.last_available_deaths) {
-                    return false;
-                }
-            } catch (System.Exception) {
+            try
+            {
+                if(oDadoArquivo.last_available_deaths != 
+                    oDadoBanco.last_available_deaths)
+                    {
+                        return false;
+                    }
+            }
+            catch (System.Exception)
+            {
                 igual = false;
             }
             // public long order_for_place { get; set; }
-            if (oDadoArquivo.order_for_place !=
-                oDadoBanco.order_for_place) {
-                return false;
-            }
+            if(oDadoArquivo.order_for_place != 
+                oDadoBanco.order_for_place)
+                {
+                    return false;
+                }
             // public string place_type { get; set; }
-            if (oDadoArquivo.place_type.Trim().ToLower() != oDadoBanco.place_type.Trim().ToLower()) {
+            if(oDadoArquivo.place_type.Trim().ToLower() != oDadoBanco.place_type.Trim().ToLower()){
                 return false;
             }
             // public string state { get; set; }
-            if (oDadoArquivo.state.Trim().ToLower() != oDadoBanco.state.Trim().ToLower()) {
+            if(oDadoArquivo.state.Trim().ToLower() != oDadoBanco.state.Trim().ToLower())
+            {
                 return false;
             }
             // public long new_confirmed { get; set; }
-            if (oDadoArquivo.new_confirmed != oDadoBanco.new_confirmed) {
+            if(oDadoArquivo.new_confirmed != oDadoBanco.new_confirmed)
+            {
                 return false;
             }
             // public long new_deaths { get; set; }
-            if (oDadoArquivo.new_deaths != oDadoBanco.new_deaths) {
+            if(oDadoArquivo.new_deaths != oDadoBanco.new_deaths)
+            {
                 return false;
             }
-
+            
 
             return igual;
         }
-
         public string GerarUId()
         { 
             Guid myuuid = Guid.NewGuid();
@@ -546,6 +640,9 @@ namespace MsSqlCovidBrFileProcess.Business
         public void Dispose()
         {
             this.controller.Dispose();
+
         }
+
+        
     }
 }

@@ -1,12 +1,12 @@
 using System;
 using System.Configuration;
 using System.IO;
+using IncrementalUfFileProcessMsSQL.Controller;
 using LibConsoleProgressBar;
+using IncrementalUfFileProcessMsSQL.Model;
 using LibToolsLog;
-using MsSqlCovidBrFileProcess.Controller;
-using MsSqlCovidBrFileProcess.Model;
 
-namespace MsSqlCovidBrFileProcess.Business
+namespace IncrementalUfFileProcessMsSQL.Business
 {
     public class RegistroDeDadosDbLocal : IDisposable
     {
@@ -15,10 +15,24 @@ namespace MsSqlCovidBrFileProcess.Business
         string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
 
+        string _ufFilter = "PB";
+
         DadosCovidController controller;
 
-        public RegistroDeDadosDbLocal()
+        public RegistroDeDadosDbLocal(string incrementalUF)
         {
+            if(incrementalUF.Trim().Equals(""))
+            {
+                string uf = ConfigurationManager.AppSettings["incrementalUF"].Replace('/', Path.DirectorySeparatorChar);
+                if (!uf.Trim().Equals(""))
+                {
+                    _ufFilter = uf;
+                }
+            }
+            else
+            {
+                _ufFilter = incrementalUF.Trim();
+            }
             string diretorioDataErro = ConfigurationManager.AppSettings["dirCsvErro"].Replace('/', Path.DirectorySeparatorChar);
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataErro))
@@ -34,7 +48,7 @@ namespace MsSqlCovidBrFileProcess.Business
                     " - Import DataSet ERRO na Limpeza.csv";
             fileErroCsvLimpeza = System.IO.Path.Combine(diretorioDataErro, FileNameLimpeza);
 
-            string diretorioDataSetLimpo = ConfigurationManager.AppSettings["dirCsvLimpo"].Replace('/', Path.DirectorySeparatorChar);
+            string diretorioDataSetLimpo = ConfigurationManager.AppSettings["dirCsvLimpo"];
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioDataSetLimpo))
                 System.IO.Directory.CreateDirectory(diretorioDataSetLimpo);
@@ -45,7 +59,7 @@ namespace MsSqlCovidBrFileProcess.Business
             
             fileCsvLimpo = System.IO.Path.Combine(diretorioDataSetLimpo, FileNameLimpo);
 
-            controller = DadosCovidController.GetInstance(new Context());
+            controller = DadosCovidController.GetInstance(new Model.Context());
         }
         
         public void processarArqCsvInserirNoDB( string [] listaCampos, long contador, long totallinhas)  
@@ -84,35 +98,45 @@ namespace MsSqlCovidBrFileProcess.Business
                 if(oDado != null)
                 {
                     int codigo = 0;
-                    try
+                    if(oDado.state != null)
                     {
-                        // Conversão para metódos sincronos funcionou mais deixou super lento
-                        DadosCovid DbObj = controller.Pesquisa(oDado);
-                        if (DbObj == null) {
-                            if (contador < totallinhas) // TODO: Revisar essa lógica
-                                codigo = controller.Cadastro(oDado);
-                            else
-                                codigo = controller.CadastroSimples(oDado);
-                        } else {
-                            // Compara dados do arquivo com dados da tabela
-                            if (!OsDadosSaoIguais(oDado, DbObj)) {
-                                // Verificação extra
-                                // Comparar date e city_ibge_code
-                                if (oDado.city_ibge_code.Trim() == DbObj.city_ibge_code.Trim()) {
-                                    if (oDado.date.CompareTo(DbObj.date) == 0) {
-                                        //Não sendo iguais os outros dados atualiza o registro do DB
-                                        DadosCovid DbAtualizado = controller.Update(DbObj.Id, oDado);
+                        if(oDado.state.Trim().ToUpper().Equals(_ufFilter.Trim().ToUpper()))
+                        {
+                            try
+                            {
+                                // Conversão para metódos sincronos funcionou mais deixou super lento
+                                DadosCovid DbObj = controller.Pesquisa(oDado);
+                                if (DbObj == null) {
+                                    if (contador < totallinhas) // TODO: Revisar essa lógica
+                                        codigo = controller.Cadastro(oDado);
+                                    else
+                                        codigo = controller.CadastroSimples(oDado);
+                                } else {
+                                    // Compara dados do arquivo com dados da tabela
+                                    if (!OsDadosSaoIguais(oDado, DbObj)) {
+                                        // Verificação extra
+                                        // Comparar date e city_ibge_code
+                                        if (oDado.city_ibge_code.Trim() == DbObj.city_ibge_code.Trim()) {
+                                            if (oDado.date.CompareTo(DbObj.date) == 0) {
+                                                //Não sendo iguais os outros dados atualiza o registro do DB
+                                                DadosCovid DbAtualizado = controller.Update(DbObj.Id, oDado);
+                                            }
+                                        }
+
                                     }
+
                                 }
-
                             }
-
+                            catch (System.Exception ex)
+                            {
+                                // Se der erro é para registrar em arquivo de log
+                                LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                            }
                         }
-                    }
-                    catch (System.Exception ex)
-                    {
-                        // Se der erro é para registrar em arquivo de log
-                        LogTools.LogErroToFile($" Erro no cadastro {ex.Message}", ex.StackTrace);
+                        else
+                        {
+                            // Registro dispensado
+                        }
                     }
                 }
 
@@ -400,6 +424,7 @@ namespace MsSqlCovidBrFileProcess.Business
 
             return igual;
         }
+
 
         public string GerarUId()
         { 

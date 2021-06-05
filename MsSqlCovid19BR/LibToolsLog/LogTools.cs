@@ -9,7 +9,7 @@ namespace LibToolsLog
         
         public static async void LogErroToFile( string mensagem, string dadosDoErro)
         {
-            string diretorioLog = ConfigurationManager.AppSettings["dirlog"];
+            string diretorioLog = ConfigurationManager.AppSettings["dirlog"].Replace('/', Path.DirectorySeparatorChar);
             // Criar Diretório se não existe
             if(!System.IO.Directory.Exists(diretorioLog))
                 System.IO.Directory.CreateDirectory(diretorioLog);

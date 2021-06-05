@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsSqlCovidBrFileProcess", "MsSqlCovidBrFileProcess\MsSqlCovidBrFileProcess.csproj", "{3DBE1E4F-1F7E-4598-A8FA-5118DCB59FCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsSqlCovidBrFileProcess", "MsSqlCovidBrFileProcess\MsSqlCovidBrFileProcess.csproj", "{3DBE1E4F-1F7E-4598-A8FA-5118DCB59FCD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibConsoleProgressBar", "LibConsoleProgressBar\LibConsoleProgressBar.csproj", "{DEBCF0C2-20E6-40DE-997D-4646EE201F50}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibToolsLog", "LibToolsLog\LibToolsLog.csproj", "{D6A95A87-28B7-43F0-B0D7-024B0D5F47AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibWeb", "LibWeb\LibWeb.csproj", "{E81290CB-BCD2-445F-809E-BBDDEF403E15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalUfFileProcessMsSQL", "IncrementalUfFileProcessMsSQL\IncrementalUfFileProcessMsSQL.csproj", "{854ED541-6044-4CAC-ACF6-277D357F85AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalDataFileProcessMsSQL", "IncrementalDataFileProcessMsSQL\IncrementalDataFileProcessMsSQL.csproj", "{11C1032F-3791-4BCC-9DC6-726C684A4BEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +101,30 @@ Global
 		{E81290CB-BCD2-445F-809E-BBDDEF403E15}.Release|x64.Build.0 = Release|Any CPU
 		{E81290CB-BCD2-445F-809E-BBDDEF403E15}.Release|x86.ActiveCfg = Release|Any CPU
 		{E81290CB-BCD2-445F-809E-BBDDEF403E15}.Release|x86.Build.0 = Release|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Debug|x64.Build.0 = Debug|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Debug|x86.Build.0 = Debug|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Release|x64.ActiveCfg = Release|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Release|x64.Build.0 = Release|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{854ED541-6044-4CAC-ACF6-277D357F85AB}.Release|x86.Build.0 = Release|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Debug|x64.Build.0 = Debug|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Debug|x86.Build.0 = Debug|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Release|x64.ActiveCfg = Release|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Release|x64.Build.0 = Release|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Release|x86.ActiveCfg = Release|Any CPU
+		{11C1032F-3791-4BCC-9DC6-726C684A4BEA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

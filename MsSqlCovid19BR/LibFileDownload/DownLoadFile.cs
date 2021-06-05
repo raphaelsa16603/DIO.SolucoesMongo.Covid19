@@ -156,8 +156,8 @@ namespace LibFileDownload
 
         public static void DownLoadFileInBackground4(string address)
         {
-            string diretorioDataSet = ConfigurationManager.AppSettings["dir"];
-            string arquivoDB = ConfigurationManager.AppSettings["file"];
+            string diretorioDataSet = ConfigurationManager.AppSettings["dir"].Replace('/', Path.DirectorySeparatorChar);
+            string arquivoDB = ConfigurationManager.AppSettings["file"].Replace('/', Path.DirectorySeparatorChar);
             string pathString = System.IO.Path.Combine(diretorioDataSet, arquivoDB);
             System.Console.WriteLine($"Arquivo : {pathString}");
             System.Console.WriteLine("");

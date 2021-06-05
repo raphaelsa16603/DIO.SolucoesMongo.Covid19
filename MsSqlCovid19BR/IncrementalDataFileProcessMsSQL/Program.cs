@@ -1,14 +1,14 @@
-﻿using LibConsoleProgressBar;
-using LibFileDownload;
-using LibFileTools;
-using LibWeb;
-using MsSqlCovidBrFileProcess.Business;
-using System;
+﻿using System;
 using System.Configuration;
 using System.IO;
 using System.Threading;
+using IncrementalDataFileProcessMsSQL.Business;
+using LibConsoleProgressBar;
+using LibFileDownload;
+using LibFileTools;
+using LibWeb;
 
-namespace MsSqlCovidBrFileProcess {
+namespace IncrementalDataFileProcessMsSQL {
     class Program {
         static void Main(string[] args) {
             string diretorioDataSet = ConfigurationManager.AppSettings["dir"].Replace('/', Path.DirectorySeparatorChar);
@@ -75,6 +75,11 @@ namespace MsSqlCovidBrFileProcess {
                 }
             }
 
+            // Atualiza arquivo de configuração 
+            // Funciona localmente na aplicação, mas aparentemente não altera o arquivo App.config
+            // var novaDataConfigTeste = DateTime.Parse(Data);
+            // AddUpdateAppSettings("incrementalData", novaDataConfigTeste.ToString("yyyy-MM-dd"));
+
             // --- Registrar os dados do CSV no banco de dados SQLite é muito lento
             // --- Solução é enviar os dados diretamente para a API RestFull
 
@@ -94,12 +99,21 @@ namespace MsSqlCovidBrFileProcess {
             // se não tiver, insere o registo com a fleg novo e o uId gerado, 
             // e se tiver, verificar se há atualização e atualiza o registro no BD, sentando a flag
             // atualizado, mantendo o uId original. 
+            
 
-
-            using (var ForDb = new RegistroDeDadosDbLocal()) {
-                System.Console.WriteLine("--------------------------------------------------------");
-                System.Console.WriteLine("Atualizando Banco de Dados MicrosoftSQL com novos dados");
-                System.Console.WriteLine("--------------------------------------------------------");
+            using (var ForDb = new RegistroDeDadosDbLocal("")) {
+                string data = "";
+                try {
+                    data = ConfigurationManager.AppSettings["incrementalData"];
+                    var teste = DateTime.Parse(data);
+                } catch (System.Exception) {
+                    data = "2021-01-13";
+                }
+                System.Console.WriteLine("---------------------------------------------------------");
+                System.Console.WriteLine("Atualizando Banco de Dados Microsoft SQL com novos dados");
+                System.Console.WriteLine("---------------------------------------------------------");
+                System.Console.WriteLine($"-----    Filtro:            Data >= {data}   -------");
+                System.Console.WriteLine("---------------------------------------------------------");
                 // Processando os arquivos csv e colocando no Banco de Dados SQLite
                 foreach (FileInfo fileToCsv in directoryFilesCsv.GetFiles("*.csv")) {
                     ReadingCSV.LerArquivoCsv(fileToCsv.FullName, ForDb.processarArqCsvInserirNoDB);
@@ -107,6 +121,11 @@ namespace MsSqlCovidBrFileProcess {
                 System.Console.WriteLine("\n");
             }
 
+
+
+            //Atualiza arquivo de configuração 
+            var novaDataConfig = DateTime.Parse(Data).AddDays(-2);
+            AddUpdateAppSettings("incrementalData", novaDataConfig.ToString("yyyy-MM-dd"));
         }
 
         static void TesteDoProgressBar() {
@@ -118,6 +137,23 @@ namespace MsSqlCovidBrFileProcess {
                 }
             }
             Console.WriteLine("Done.");
+        }
+
+
+        private static void AddUpdateAppSettings(string key, string value) {
+            try {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+                if (settings[key] == null) {
+                    settings.Add(key, value);
+                } else {
+                    settings[key].Value = value;
+                }
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            } catch (ConfigurationErrorsException) {
+                Console.WriteLine("Error writing app settings");
+            }
         }
     }
 }
