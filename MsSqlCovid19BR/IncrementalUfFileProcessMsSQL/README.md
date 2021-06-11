@@ -13,6 +13,8 @@
 - dotnet add package Microsoft.EntityFrameworkCore.Tools
 - dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
+Server=.;Database=Covid19Br;userid=appcovid19br;password=covid19BR;
+
 
 
 
