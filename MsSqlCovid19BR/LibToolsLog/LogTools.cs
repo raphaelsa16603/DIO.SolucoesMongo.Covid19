@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LibToolsLog
 {
@@ -20,17 +22,29 @@ namespace LibToolsLog
             string fileErroLog = System.IO.Path.Combine(diretorioLog, FileName);
 
             string textoCsv = $"ERRO at {DateTime.Now.ToString()}: {mensagem} --> {dadosDoErro}";
-            if (!File.Exists(fileErroLog))
-            {
-                using (var stream = new StreamWriter(fileErroLog))
-                {
-                    await stream.WriteLineAsync(textoCsv);
+            try {
+                await WriterLogFile(fileErroLog, textoCsv);
+            } catch (Exception ex) {
+                Thread.Sleep(100);
+                try {
+                    await WriterLogFile(fileErroLog, textoCsv);
+                } catch (Exception ex2) {
+                    Thread.Sleep(100);
+                    try {
+                        await WriterLogFile(fileErroLog, textoCsv);
+                    } catch (Exception ex3) {
+                    }
                 }
             }
-            else
-            {
-                using (StreamWriter sw = File.AppendText(fileErroLog))
-                {
+        }
+
+        private static async Task WriterLogFile(string fileErroLog, string textoCsv) {
+            if (!File.Exists(fileErroLog)) {
+                using (var stream = new StreamWriter(fileErroLog)) {
+                    await stream.WriteLineAsync(textoCsv);
+                }
+            } else {
+                using (StreamWriter sw = File.AppendText(fileErroLog)) {
                     await sw.WriteLineAsync(textoCsv);
                 }
             }
