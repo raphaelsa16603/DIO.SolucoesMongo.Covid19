@@ -5,6 +5,8 @@ using IncrementalDataFileProcessMsSQL.Controller;
 using LibConsoleProgressBar;
 using IncrementalDataFileProcessMsSQL.Model;
 using LibToolsLog;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace IncrementalDataFileProcessMsSQL.Business
 {
@@ -300,24 +302,39 @@ namespace IncrementalDataFileProcessMsSQL.Business
             oDado.dadosAtualizados = false;
         }
 
-        private async void ErroToFileDataErro( string [] listaCampos )
-        {
+        private async void ErroToFileDataErro(string[] listaCampos) {
             string textoCsv = "";
-            foreach (string campo in listaCampos)
-            {
+            foreach (string campo in listaCampos) {
                 textoCsv += $"{campo},";
             }
-            if (!File.Exists(fileErroCsv))
-            {
-                using (var stream = new StreamWriter(fileErroCsv))
-                {
-                    await stream.WriteLineAsync(textoCsv);
+            try {
+                await SalvamentoDataErro(textoCsv);
+            } catch (Exception ex01) {
+                Thread.Sleep(50);
+                try {
+                    await SalvamentoDataErro(textoCsv);
+                } catch (Exception ex02) {
+                    Thread.Sleep(80);
+                    try {
+                        await SalvamentoDataErro(textoCsv);
+                    } catch (Exception ex03) {
+                        Thread.Sleep(100);
+                        try {
+                            await SalvamentoDataErro(textoCsv);
+                        } catch (Exception ex04) {
+                        }
+                    }
                 }
             }
-            else
-            {
-                using (StreamWriter sw = File.AppendText(fileErroCsv))
-                {
+        }
+
+        private async Task SalvamentoDataErro(string textoCsv) {
+            if (!File.Exists(fileErroCsv)) {
+                using (var stream = new StreamWriter(fileErroCsv)) {
+                    await stream.WriteLineAsync(textoCsv);
+                }
+            } else {
+                using (StreamWriter sw = File.AppendText(fileErroCsv)) {
                     await sw.WriteLineAsync(textoCsv);
                 }
             }
@@ -591,47 +608,77 @@ namespace IncrementalDataFileProcessMsSQL.Business
 
         }
 
-        private async void SalvarCamposNovoArquivoCsvLimpo( string [] listaCampos )
-        {
+        private async void SalvarCamposNovoArquivoCsvLimpo(string[] listaCampos) {
             string textoCsv = "";
-            foreach (string campo in listaCampos)
-            {
+            foreach (string campo in listaCampos) {
                 textoCsv += $"{campo},";
             }
-            if (!File.Exists(fileCsvLimpo))
-            {
-                using (var stream = new StreamWriter(fileCsvLimpo))
-                {
-                    await stream.WriteLineAsync(textoCsv);
+            try {
+                await EscritaDoArquivo(textoCsv);
+            } catch (Exception ex01) {
+                Thread.Sleep(50);
+                try {
+                    await EscritaDoArquivo(textoCsv);
+                } catch (Exception ex02) {
+                    Thread.Sleep(80);
+                    try {
+                        await EscritaDoArquivo(textoCsv);
+                    } catch (Exception ex03) {
+                        Thread.Sleep(100);
+                        try {
+                            await EscritaDoArquivo(textoCsv);
+                        } catch (Exception ex04) {
+                        }
+                    }
                 }
             }
-            else
-            {
-                using (StreamWriter sw = File.AppendText(fileCsvLimpo))
-                {
+        }
+
+        private async Task EscritaDoArquivo(string textoCsv) {
+            if (!File.Exists(fileCsvLimpo)) {
+                using (var stream = new StreamWriter(fileCsvLimpo)) {
+                    await stream.WriteLineAsync(textoCsv);
+                }
+            } else {
+                using (StreamWriter sw = File.AppendText(fileCsvLimpo)) {
                     await sw.WriteLineAsync(textoCsv);
                 }
             }
         }
 
-        private async void ErroToFileDataErroLimpeza( string [] listaCampos )
-        {
+        private async void ErroToFileDataErroLimpeza(string[] listaCampos) {
             string textoCsv = "";
-            foreach (string campo in listaCampos)
-            {
+            foreach (string campo in listaCampos) {
                 textoCsv += $"{campo},";
             }
-            if (!File.Exists(fileErroCsvLimpeza))
-            {
-                using (var stream = new StreamWriter(fileErroCsvLimpeza))
-                {
-                    await stream.WriteLineAsync(textoCsv);
+            try {
+                await EscritaDoArquivoLimpo(textoCsv);
+            } catch (Exception ex01) {
+                Thread.Sleep(50);
+                try {
+                    await EscritaDoArquivoLimpo(textoCsv);
+                } catch (Exception ex02) {
+                    Thread.Sleep(80);
+                    try {
+                        await EscritaDoArquivoLimpo(textoCsv);
+                    } catch (Exception ex03) {
+                        Thread.Sleep(100);
+                        try {
+                            await EscritaDoArquivoLimpo(textoCsv);
+                        } catch (Exception ex04) {
+                        }
+                    }
                 }
             }
-            else
-            {
-                using (StreamWriter sw = File.AppendText(fileErroCsvLimpeza))
-                {
+        }
+
+        private async Task EscritaDoArquivoLimpo(string textoCsv) {
+            if (!File.Exists(fileErroCsvLimpeza)) {
+                using (var stream = new StreamWriter(fileErroCsvLimpeza)) {
+                    await stream.WriteLineAsync(textoCsv);
+                }
+            } else {
+                using (StreamWriter sw = File.AppendText(fileErroCsvLimpeza)) {
                     await sw.WriteLineAsync(textoCsv);
                 }
             }
