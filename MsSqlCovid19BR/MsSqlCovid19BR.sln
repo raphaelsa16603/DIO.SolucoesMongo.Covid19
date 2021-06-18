@@ -15,11 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibToolsLog", "LibToolsLog\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibWeb", "LibWeb\LibWeb.csproj", "{E81290CB-BCD2-445F-809E-BBDDEF403E15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalUfFileProcessMsSQL", "IncrementalUfFileProcessMsSQL\IncrementalUfFileProcessMsSQL.csproj", "{854ED541-6044-4CAC-ACF6-277D357F85AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IncrementalUfFileProcessMsSQL", "IncrementalUfFileProcessMsSQL\IncrementalUfFileProcessMsSQL.csproj", "{854ED541-6044-4CAC-ACF6-277D357F85AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalDataFileProcessMsSQL", "IncrementalDataFileProcessMsSQL\IncrementalDataFileProcessMsSQL.csproj", "{11C1032F-3791-4BCC-9DC6-726C684A4BEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IncrementalDataFileProcessMsSQL", "IncrementalDataFileProcessMsSQL\IncrementalDataFileProcessMsSQL.csproj", "{11C1032F-3791-4BCC-9DC6-726C684A4BEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalCovid19Br", "PortalCovid19Br\PortalCovid19Br.csproj", "{B9669699-3428-4DCC-98BB-2302B86A85ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCovid19Br", "PortalCovid19Br\PortalCovid19Br.csproj", "{B9669699-3428-4DCC-98BB-2302B86A85ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalDataUfFileProcessMsSQL", "IncrementalDataUfFileProcessMsSQL\IncrementalDataUfFileProcessMsSQL.csproj", "{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +141,18 @@ Global
 		{B9669699-3428-4DCC-98BB-2302B86A85ED}.Release|x64.Build.0 = Release|Any CPU
 		{B9669699-3428-4DCC-98BB-2302B86A85ED}.Release|x86.ActiveCfg = Release|Any CPU
 		{B9669699-3428-4DCC-98BB-2302B86A85ED}.Release|x86.Build.0 = Release|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Debug|x64.Build.0 = Debug|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Debug|x86.Build.0 = Debug|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x64.ActiveCfg = Release|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x64.Build.0 = Release|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x86.ActiveCfg = Release|Any CPU
+		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
