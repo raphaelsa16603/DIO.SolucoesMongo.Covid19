@@ -13,6 +13,9 @@
 - dotnet add package Microsoft.EntityFrameworkCore.Tools
 - dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL 
 
+## Instalação do EF do dotnet - se necessário
+- dotnet tool install --global dotnet-ef
+
 ## EF Criação da base de dados
 - dotnet ef migrations add InitDadosCovid19BR
 -- Add-Migration InitDadosCovid19BR
