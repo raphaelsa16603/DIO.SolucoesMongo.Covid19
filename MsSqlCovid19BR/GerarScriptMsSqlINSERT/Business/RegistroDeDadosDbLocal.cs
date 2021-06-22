@@ -17,6 +17,7 @@ namespace GerarScriptMsSqlINSERT.Business
         string fileScriptComandosSql = "";
         string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
+        string ufAtual = "";
 
         
         public RegistroDeDadosDbLocal()
@@ -98,6 +99,26 @@ namespace GerarScriptMsSqlINSERT.Business
                     int codigo = 0;
                     try
                     {
+                        if (oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()))
+                        {
+                            // Altera o nome do arquivo 
+                            string diretorioScriptSql = "./ScriptMsSql".Replace('/', Path.DirectorySeparatorChar);
+                            // Criar Diretório se não existe cria
+                            if (!System.IO.Directory.Exists(diretorioScriptSql))
+                                System.IO.Directory.CreateDirectory(diretorioScriptSql);
+
+                            string fileScript = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
+                                    .Replace("/", "-").Replace(":", "_") +
+                                    $" - {oDado.state.Trim().ToUpper()} " +
+                                    " - Script de INSERTs SqlServer.sql";
+                            fileScriptComandosSql = System.IO.Path.Combine(diretorioScriptSql, fileScript);
+
+                            // Gera script inicial
+                            string comandoInical = "USE [Covid19Br] \n" +
+                                                   "GO \n\n\n";
+                            GravarComandoInsertFile(comandoInical);
+                        }
+                        
                         // Gerando Script de INSERT na tabela do Banco de Dados Microsoft SQL Server
                         string insertComand = GerarSciptInsert(oDado);
                         GravarComandoInsertFile(insertComand);
