@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IncrementalDataFileProcessM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalCovid19Br", "PortalCovid19Br\PortalCovid19Br.csproj", "{B9669699-3428-4DCC-98BB-2302B86A85ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalDataUfFileProcessMsSQL", "IncrementalDataUfFileProcessMsSQL\IncrementalDataUfFileProcessMsSQL.csproj", "{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IncrementalDataUfFileProcessMsSQL", "IncrementalDataUfFileProcessMsSQL\IncrementalDataUfFileProcessMsSQL.csproj", "{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerarScriptMsSqlINSERT", "GerarScriptMsSqlINSERT\GerarScriptMsSqlINSERT.csproj", "{E6792682-753A-431E-B1D3-199F36A7DBA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,18 @@ Global
 		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x64.Build.0 = Release|Any CPU
 		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x86.ActiveCfg = Release|Any CPU
 		{0EAA52E6-B47F-40E4-8EBE-0E2A539DA4BE}.Release|x86.Build.0 = Release|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Debug|x64.Build.0 = Debug|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Debug|x86.Build.0 = Debug|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Release|x64.ActiveCfg = Release|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Release|x64.Build.0 = Release|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{E6792682-753A-431E-B1D3-199F36A7DBA6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
