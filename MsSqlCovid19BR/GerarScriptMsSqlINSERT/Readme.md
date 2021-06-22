@@ -33,4 +33,4 @@ Sqlcmd            [-U login id]          [-P password]
   [-x disable variable substitution]
   [-? show syntax summary] 
 
-#### sqlcmd  -i ./2021-06-21_23-49\ -\ Script\ de\ INSERTs\ SqlServer.sql
+#### sqlcmd -S localhost -i ./2021-06-21_23-49\ -\ Script\ de\ INSERTs\ SqlServer.sql
