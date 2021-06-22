@@ -169,8 +169,8 @@ namespace GerarScriptMsSqlINSERT.Business
             commandInsertBuilder.Append($" {oDado.new_confirmed}, ");
             commandInsertBuilder.Append($" {oDado.new_deaths}, ");
             commandInsertBuilder.Append($" N'{oDado.uId}', ");
-            commandInsertBuilder.Append($" {oDado.dadosNovos}, ");
-            commandInsertBuilder.Append($" {oDado.dadosAtualizados} ");
+            commandInsertBuilder.Append($" {(oDado.dadosNovos ? 1 : 0)}, ");
+            commandInsertBuilder.Append($" {(oDado.dadosAtualizados ? 1 : 0)} ");
             commandInsertBuilder.Append($" ) ");
 
             comandoINSERT = commandInsertBuilder.ToString();
