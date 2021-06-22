@@ -99,7 +99,7 @@ namespace GerarScriptMsSqlINSERT.Business
                     int codigo = 0;
                     try
                     {
-                        if (oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()))
+                        if (!oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()))
                         {
                             // Altera o nome do arquivo 
                             string diretorioScriptSql = "./ScriptMsSql".Replace('/', Path.DirectorySeparatorChar);
