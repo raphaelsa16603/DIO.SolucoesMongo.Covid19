@@ -6,8 +6,8 @@ FOR /d %%a IN (*) DO (
     FOR %%b IN (*) DO (
         SETLOCAL ENABLEDELAYEDEXPANSION
         set str=%%b
-        call echo Processando o arquivo [%%str: =/ %%]
-        call sqlcmd -S localhost -i .\%%str: =/ %%
+        call echo Processando o arquivo [%%b]
+        call sqlcmd -S localhost -i %%b
         ENDLOCAL
     )
     cd ..
