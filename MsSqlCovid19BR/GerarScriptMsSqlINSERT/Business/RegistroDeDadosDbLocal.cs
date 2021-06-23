@@ -100,11 +100,11 @@ namespace GerarScriptMsSqlINSERT.Business
                     try
                     {
                         if (!oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()) ||
-                            !oDado.date.ToString("MM").Equals(mesAtual.Trim()))
+                            !oDado.date.ToString("YYYY-MM").Equals(mesAtual.Trim()))
                         {
                             // Bug: tem que atualizar a variável global ufAtual e mesAtual toda vez que muda
                             ufAtual = oDado.state.Trim().ToUpper();
-                            mesAtual = oDado.date.ToString("MM");
+                            mesAtual = oDado.date.ToString("YYYY-MM");
                             // Altera o nome do arquivo 
                             string diretorioScriptSql = $"./ScriptMsSql/{ufAtual}".Replace('/', Path.DirectorySeparatorChar);
                             // Criar Diretório se não existe cria
@@ -114,7 +114,7 @@ namespace GerarScriptMsSqlINSERT.Business
                             string fileScript = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
                                     .Replace("/", "-").Replace(":", "_") +
                                     $" - {oDado.state.Trim().ToUpper()} " +
-                                    $" - {oDado.date.ToString("MM")}" +
+                                    $" - {oDado.date.ToString("YYYY-MM")}" +
                                     " - Script de INSERTs SqlServer.sql";
                             fileScriptComandosSql = System.IO.Path.Combine(diretorioScriptSql, fileScript);
 
@@ -176,25 +176,25 @@ namespace GerarScriptMsSqlINSERT.Business
             commandInsertBuilder.Append(" [dadosAtualizados]) ");
             commandInsertBuilder.Append(" VALUES ");
             commandInsertBuilder.Append(" ( ");
-            commandInsertBuilder.Append($" N'{oDado.city}', ");
-            commandInsertBuilder.Append($" N'{oDado.city_ibge_code}', ");
+            commandInsertBuilder.Append($" N'{oDado.city.Replace("'","''")}', ");
+            commandInsertBuilder.Append($" N'{oDado.city_ibge_code.Replace("'", "''")}', ");
             commandInsertBuilder.Append($" CAST(N'{oDado.date.ToString("yyyy-MM-dd HH:mm:ss")}' AS DateTime2), ");
-            commandInsertBuilder.Append($" N'{oDado.epidemiological_week}', ");
+            commandInsertBuilder.Append($" N'{oDado.epidemiological_week.Replace("'", "''")}', ");
             commandInsertBuilder.Append($" {oDado.estimated_population}, ");
             commandInsertBuilder.Append($" {oDado.estimated_population_2019}, ");
-            commandInsertBuilder.Append($" N'{oDado.is_last}', ");
-            commandInsertBuilder.Append($" N'{oDado.is_repeated}', ");
+            commandInsertBuilder.Append($" N'{oDado.is_last.Replace("'", "''")}', ");
+            commandInsertBuilder.Append($" N'{oDado.is_repeated.Replace("'", "''")}', ");
             commandInsertBuilder.Append($" {oDado.city_ibglast_available_confirmede_code}, ");
             commandInsertBuilder.Append($" {oDado.last_available_confirmed_per_100k_inhabitants}, ");
             commandInsertBuilder.Append($" CAST(N'{oDado.last_available_date.ToString("yyyy-MM-dd HH:mm:ss")}' AS DateTime2), ");
             commandInsertBuilder.Append($" {oDado.last_available_death_rate}, ");
             commandInsertBuilder.Append($" {oDado.last_available_deaths}, ");
             commandInsertBuilder.Append($" {oDado.order_for_place}, ");
-            commandInsertBuilder.Append($" N'{oDado.place_type}', ");
-            commandInsertBuilder.Append($" N'{oDado.state}', ");
+            commandInsertBuilder.Append($" N'{oDado.place_type.Replace("'", "''")}', ");
+            commandInsertBuilder.Append($" N'{oDado.state.Replace("'", "''")}', ");
             commandInsertBuilder.Append($" {oDado.new_confirmed}, ");
             commandInsertBuilder.Append($" {oDado.new_deaths}, ");
-            commandInsertBuilder.Append($" N'{oDado.uId}', ");
+            commandInsertBuilder.Append($" N'{oDado.uId.Replace("'", "''")}', ");
             commandInsertBuilder.Append($" {(oDado.dadosNovos ? 1 : 0)}, ");
             commandInsertBuilder.Append($" {(oDado.dadosAtualizados ? 1 : 0)} ");
             commandInsertBuilder.Append($" ) ");
