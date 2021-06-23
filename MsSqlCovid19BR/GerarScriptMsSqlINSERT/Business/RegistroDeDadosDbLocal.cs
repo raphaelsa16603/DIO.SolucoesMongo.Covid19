@@ -113,9 +113,9 @@ namespace GerarScriptMsSqlINSERT.Business
 
                             string fileScript = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
                                     .Replace("/", "-").Replace(":", "_") +
-                                    $" - {oDado.state.Trim().ToUpper()} " +
-                                    $" - {oDado.date.ToString("yyyy-MM")}" +
-                                    " - Script de INSERTs SqlServer.sql";
+                                    $"-{oDado.state.Trim().ToUpper()}" +
+                                    $"-{oDado.date.ToString("yyyy-MM")}" +
+                                    "-Script-INSERT-SqlServer.sql";
                             fileScriptComandosSql = System.IO.Path.Combine(diretorioScriptSql, fileScript);
 
                             // Gera script inicial
