@@ -243,14 +243,15 @@ namespace GerarScriptMsSqlINSERT.Business
         {
             if (!File.Exists(fileScriptComandosSql))
             {
-                using (var stream = new StreamWriter(fileScriptComandosSql))
+                var fs = new FileStream(fileScriptComandosSql, FileMode.CreateNew);
+                using (var stream = new StreamWriter(fs, Encoding.UTF8))
                 {
                     await stream.WriteLineAsync(comandoSqlInsert);
                 }
             }
             else
             {
-                using (StreamWriter sw = File.AppendText(fileScriptComandosSql))
+                using (var sw = new StreamWriter(fileScriptComandosSql, true, Encoding.UTF8))
                 {
                     await sw.WriteLineAsync(comandoSqlInsert);
                 }
