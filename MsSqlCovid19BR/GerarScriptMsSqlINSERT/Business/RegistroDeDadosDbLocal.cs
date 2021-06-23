@@ -100,11 +100,11 @@ namespace GerarScriptMsSqlINSERT.Business
                     try
                     {
                         if (!oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()) ||
-                            !oDado.date.ToString("YYYY-MM").Equals(mesAtual.Trim()))
+                            !oDado.date.ToString("yyyy-MM").Equals(mesAtual.Trim()))
                         {
                             // Bug: tem que atualizar a variável global ufAtual e mesAtual toda vez que muda
                             ufAtual = oDado.state.Trim().ToUpper();
-                            mesAtual = oDado.date.ToString("YYYY-MM");
+                            mesAtual = oDado.date.ToString("yyyy-MM");
                             // Altera o nome do arquivo 
                             string diretorioScriptSql = $"./ScriptMsSql/{ufAtual}".Replace('/', Path.DirectorySeparatorChar);
                             // Criar Diretório se não existe cria
@@ -114,7 +114,7 @@ namespace GerarScriptMsSqlINSERT.Business
                             string fileScript = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
                                     .Replace("/", "-").Replace(":", "_") +
                                     $" - {oDado.state.Trim().ToUpper()} " +
-                                    $" - {oDado.date.ToString("YYYY-MM")}" +
+                                    $" - {oDado.date.ToString("yyyy-MM")}" +
                                     " - Script de INSERTs SqlServer.sql";
                             fileScriptComandosSql = System.IO.Path.Combine(diretorioScriptSql, fileScript);
 
