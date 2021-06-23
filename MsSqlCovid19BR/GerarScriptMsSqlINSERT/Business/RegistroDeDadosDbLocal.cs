@@ -18,6 +18,7 @@ namespace GerarScriptMsSqlINSERT.Business
         string fileErroCsvLimpeza = "";
         string fileCsvLimpo = "";
         string ufAtual = "";
+        string mesAtual = "";
 
         
         public RegistroDeDadosDbLocal()
@@ -96,13 +97,16 @@ namespace GerarScriptMsSqlINSERT.Business
 
                 if(oDado != null)
                 {
-                    int codigo = 0;
                     try
                     {
-                        if (!oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()))
+                        if (!oDado.state.Trim().ToUpper().Equals(ufAtual.Trim().ToUpper()) ||
+                            !oDado.date.ToString("MM").Equals(mesAtual.Trim()))
                         {
+                            // Bug: tem que atualizar a variável global ufAtual e mesAtual toda vez que muda
+                            ufAtual = oDado.state.Trim().ToUpper();
+                            mesAtual = oDado.date.ToString("MM");
                             // Altera o nome do arquivo 
-                            string diretorioScriptSql = "./ScriptMsSql".Replace('/', Path.DirectorySeparatorChar);
+                            string diretorioScriptSql = $"./ScriptMsSql/{ufAtual}".Replace('/', Path.DirectorySeparatorChar);
                             // Criar Diretório se não existe cria
                             if (!System.IO.Directory.Exists(diretorioScriptSql))
                                 System.IO.Directory.CreateDirectory(diretorioScriptSql);
@@ -110,6 +114,7 @@ namespace GerarScriptMsSqlINSERT.Business
                             string fileScript = DateTime.Now.ToString("yyyy-MM-dd_HH-mm")
                                     .Replace("/", "-").Replace(":", "_") +
                                     $" - {oDado.state.Trim().ToUpper()} " +
+                                    $" - {oDado.date.ToString("MM")}" +
                                     " - Script de INSERTs SqlServer.sql";
                             fileScriptComandosSql = System.IO.Path.Combine(diretorioScriptSql, fileScript);
 
