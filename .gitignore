@@ -450,3 +450,5 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+/MsSqlCovid19BR/ScriptsSQL/2021-06-29-script-Schema-e-Data.sql
+/MsSqlCovid19BR/ScriptsSQL/2021-06-20 - Dados_Script.sql
